@@ -1,11 +1,14 @@
 package com.miya.conf;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import com.miya.common.TempInterceptor;
 import com.miya.common.anno.CurrentUserInfoResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -40,6 +43,14 @@ public class TempBeanConf implements WebMvcConfigurer {
         resolvers.add(currentUserInfoResolver);
     }
 
+
+//    /** 全局自定义配置 */
+//    @Bean(name = "globalConfig")
+//    @ConfigurationProperties(prefix = "mybatis-plus.local")
+//    public GlobalConfig globalConfig(){
+//        return new GlobalConfig();
+//    }
+
     /**
      * mybatis-plus
      * @return
@@ -53,6 +64,7 @@ public class TempBeanConf implements WebMvcConfigurer {
         // paginationInterceptor.setLimit(500);
         // 开启 count 的 join 优化,只针对部分 left join
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
+        paginationInterceptor.setDbType(DbType.MYSQL);
         return paginationInterceptor;
     }
 

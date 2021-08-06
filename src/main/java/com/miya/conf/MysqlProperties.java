@@ -1,5 +1,6 @@
 package com.miya.conf;
 
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -32,7 +33,8 @@ public class MysqlProperties {
     @Bean(name = "mysqlSqlSessionFactory")
     @Primary
     public SqlSessionFactory mysqlSqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        // 如果这里要使用mybatis-plus的话，一定要使用MybatisSqlSessionFactoryBean，而不是SqlSessionFactory；
+        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mappers/mysql/*.xml"));
         return bean.getObject();
