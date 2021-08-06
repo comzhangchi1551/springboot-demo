@@ -1,10 +1,13 @@
 package com.miya.common;
 
+import com.miya.common.utils.tracer.TraceThreadLocal;
+import com.miya.common.utils.tracer.TracerEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -26,7 +29,19 @@ public class TempFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.error("<<<<<<<<< doFilter");
-        filterChain.doFilter(servletRequest, servletResponse);
+        TracerEntry tracerEntry = TraceThreadLocal.get();
+        if (tracerEntry == null) {
+            TracerEntry acquire = TracerEntry.acquire();
+            acquire.setPath(((HttpServletRequest) servletRequest).getRequestURI());
+            TraceThreadLocal.set(acquire);
+        }
+        try {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Exception e) {
+            log.error("filter过滤链出现错误", e);
+        } finally {
+            TraceThreadLocal.remove();
+        }
         log.error("doFilter >>>>>>>>");
     }
 

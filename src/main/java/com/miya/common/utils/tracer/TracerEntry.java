@@ -3,7 +3,8 @@ package com.miya.common.utils.tracer;
 import lombok.Data;
 
 /**
- * 跟踪entry
+ * 跟踪entry:
+ * 每个请求进来之后，都会创建一个此对象的ThreadLocal进行追踪，主要是追踪开始时间和结束时间，从而计算接口处理时间；
  *
  * @author lmx
  */

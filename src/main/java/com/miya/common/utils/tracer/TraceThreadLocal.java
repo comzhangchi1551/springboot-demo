@@ -1,5 +1,9 @@
 package com.miya.common.utils.tracer;
 
+
+/**
+ * ThreadLoad
+ */
 public class TraceThreadLocal {
 
     private static final ThreadLocal<TracerEntry> TRACER = new ThreadLocal<>();
