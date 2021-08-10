@@ -1,5 +1,6 @@
 package com.miya.conf;
 
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -29,7 +30,7 @@ public class CkProperties {
 
     @Bean(name = "ckSqlSessionFactory")
     public SqlSessionFactory ckSqlSessionFactory(@Qualifier("ckDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mappers/ck/*.xml"));
         return bean.getObject();

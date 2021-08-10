@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TempUserDAO extends BaseMapper<TempUser> {
 
-    int insert(@Param("entity") TempUser entity);
+//    int insert(@Param("entity") TempUser entity);
 }

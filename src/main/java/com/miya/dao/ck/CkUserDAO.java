@@ -1,8 +1,8 @@
 package com.miya.dao.ck;
 
-import com.miya.entity.model.ck.CkUserDO;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.miya.entity.model.ck.CkUser;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface CkUserDAO {
-    void insert(@Param("ckUserDO") CkUserDO ckUserDO);
+public interface CkUserDAO extends BaseMapper<CkUser> {
+//    void insert(@Param("ckUserDO") CkUserDO ckUserDO);
 }

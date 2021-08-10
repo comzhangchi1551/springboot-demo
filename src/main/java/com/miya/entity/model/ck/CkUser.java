@@ -8,7 +8,7 @@ import lombok.Data;
  * @Date: 2021/8/4 11:49
  */
 @Data
-public class CkUserDO {
+public class CkUser {
     private Long id;
     private String name;
     private Integer age;

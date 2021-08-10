@@ -2,9 +2,8 @@ package com.miya.ck;
 
 import com.miya.dao.ck.CkUserDAO;
 import com.miya.dao.mysql.TempUserDAO;
-import com.miya.entity.model.ck.CkUserDO;
+import com.miya.entity.model.ck.CkUser;
 import com.miya.entity.model.mysql.TempUser;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +25,7 @@ public class DoubleDatabasesTest{
     @Test
     public void insertMysql(){
         TempUser tempUser = new TempUser();
-        tempUser.setName("你不好");
+        tempUser.setName("mysql 111");
         tempUser.setAge(14);
         tempUserDAO.insert(tempUser);
     }
@@ -34,9 +33,9 @@ public class DoubleDatabasesTest{
 
     @Test
     public void insertCkUser(){
-        CkUserDO ckUser = new CkUserDO();
+        CkUser ckUser = new CkUser();
         ckUser.setId(2L);
-        ckUser.setName("嗯嗯嗯2");
+        ckUser.setName("ck111");
         ckUser.setAge(14);
         ckUserDAO.insert(ckUser);
     }
