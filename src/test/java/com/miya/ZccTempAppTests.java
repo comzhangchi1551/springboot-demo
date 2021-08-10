@@ -20,6 +20,8 @@ class ZccTempAppTests {
         Page<TempUser> all = tempUserService.getAll(1, 1000);
         List<TempUser> records = all.getRecords();
         System.out.println("records = " + records);
+
+
     }
 
 }
