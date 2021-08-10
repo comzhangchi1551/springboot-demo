@@ -23,12 +23,12 @@ public class TempFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.error("Filter ===> init");
+//        log.error("Filter ===> init");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.error("<<<<<<<<< doFilter");
+//        log.error("<<<<<<<<< doFilter");
         TracerEntry tracerEntry = TraceThreadLocal.get();
         if (tracerEntry == null) {
             TracerEntry acquire = TracerEntry.acquire();
@@ -42,11 +42,11 @@ public class TempFilter implements Filter {
         } finally {
             TraceThreadLocal.remove();
         }
-        log.error("doFilter >>>>>>>>");
+//        log.error("doFilter >>>>>>>>");
     }
 
     @Override
     public void destroy() {
-        log.error("Filter ===> destroy");
+//        log.error("Filter ===> destroy");
     }
 }

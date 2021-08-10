@@ -1,10 +1,10 @@
 package com.miya.controller;
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.cache.MapCache;
 import com.alibaba.fastjson.JSON;
 import com.miya.common.BaseException;
 import com.miya.common.easyexcel.TempUserListener;
+import com.miya.entity.easy.excel.TempUserEE;
 import com.miya.entity.model.mysql.TempUser;
 import com.miya.service.TempUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class EasyExcelController {
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
             // 这里需要设置不关闭流
             EasyExcel.write(response.getOutputStream(), TempUser.class)
-                    .autoCloseStream(Boolean.FALSE).sheet("模板")
+                    .autoCloseStream(Boolean.FALSE).sheet()
                     .doWrite(tempUserService.getAll(1, 10000).getRecords());
         } catch (Exception e) {
             // 重置response
@@ -76,6 +76,6 @@ public class EasyExcelController {
             throw new BaseException("文件太大；");
         }
 
-        EasyExcel.read(file.getInputStream(), TempUser.class, new TempUserListener(tempUserService)).sheet().doRead();
+        EasyExcel.read(file.getInputStream(), TempUserEE.class, new TempUserListener(tempUserService)).sheet().doRead();
     }
 }

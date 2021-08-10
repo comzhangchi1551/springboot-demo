@@ -12,16 +12,12 @@ import lombok.Data;
  * Date: 2021/2/22 13:41
  */
 @Data
-@ExcelIgnoreUnannotated
 public class TempUser {
 
     @TableId(type = IdType.AUTO)
-    @ExcelProperty("主键ID")
     private Integer id;
 
-    @ExcelProperty("姓名")
     private String name;
 
-    @ExcelProperty("年龄")
     private Integer age;
 }

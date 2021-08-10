@@ -16,3 +16,5 @@
 ### 8. controller层参数注入示例。
 ### 9. 结合ThreadLocal、过滤器、aop切面的技术，实现接口调用时间的日志打印。
 ### 10. 双数据源的配置（mysql、clickHouse），如果是双mysql，因该是相同原理；
+### 11. 双数据源均配置可使用mybatis-plus；
+### 12. 验证easyExcel的测试接口，导入和读取；
