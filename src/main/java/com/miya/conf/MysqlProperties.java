@@ -1,8 +1,9 @@
 package com.miya.conf;
 
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,10 +33,13 @@ public class MysqlProperties {
 
     @Bean(name = "mysqlSqlSessionFactory")
     @Primary
-    public SqlSessionFactory mysqlSqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource) throws Exception {
+    public SqlSessionFactory mysqlSqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource, PaginationInterceptor paginationInterceptor) throws Exception {
         // 如果这里要使用mybatis-plus的话，一定要使用MybatisSqlSessionFactoryBean，而不是SqlSessionFactory；
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);
+        // 设置mybatisPlus插件；否则分页不生效；
+        Interceptor[] plugins = {paginationInterceptor};
+        bean.setPlugins(plugins);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mappers/mysql/*.xml"));
         return bean.getObject();
     }

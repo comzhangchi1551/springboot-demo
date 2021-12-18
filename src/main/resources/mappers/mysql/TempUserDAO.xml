@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.miya.dao.mysql.TempUserDAO">
-<!--    <insert id="insert">-->
-<!--        insert into temp_user (name, age) values (#{entity.name}, #{entity.age})-->
-<!--    </insert>-->
+
+    <insert id="insertBatch">
+        insert into temp_user (name, age)
+        values
+        <foreach collection="tempUserList" item="tempUser" separator=",">
+            (#{tempUser.name}, #{tempUser.age})
+        </foreach>
+
+    </insert>
 </mapper>

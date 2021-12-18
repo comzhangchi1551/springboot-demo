@@ -5,6 +5,8 @@ import com.miya.entity.model.mysql.TempUser;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Auth: 张
  * Desc: 实体类
@@ -13,5 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TempUserDAO extends BaseMapper<TempUser> {
 
-//    int insert(@Param("entity") TempUser entity);
+    int insertBatch(@Param("tempUserList") List<TempUser> tempUserList);
+
 }

@@ -4,7 +4,9 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Auth: 张
@@ -12,6 +14,7 @@ import lombok.Data;
  * Date: 2021/2/22 13:41
  */
 @Data
+@NoArgsConstructor
 public class TempUser {
 
     @TableId(type = IdType.AUTO)
@@ -20,4 +23,12 @@ public class TempUser {
     private String name;
 
     private Integer age;
+
+
+
+
+    public TempUser(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
 }

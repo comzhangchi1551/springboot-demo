@@ -12,7 +12,6 @@ import lombok.Data;
  * Date: 2021/2/22 13:41
  */
 @Data
-@ExcelIgnoreUnannotated
 public class TempUserEE {
 
     @ExcelProperty("主键ID")
@@ -23,4 +22,8 @@ public class TempUserEE {
 
     @ExcelProperty("年龄")
     private Integer age;
+
+    private String custom1;
+
+    private String custom2;
 }
