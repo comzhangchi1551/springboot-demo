@@ -1,6 +1,7 @@
 package com.miya;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.miya.dao.mysql.TempUserDAO;
 import com.miya.entity.model.mysql.TempUser;
 import com.miya.service.TempUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +16,12 @@ import java.util.List;
 class ZccTempAppTests {
 
     @Autowired
-    private TempUserService tempUserService;
+    private TempUserDAO tempUserDAO;
 
     @Test
     void contextLoads() {
-        Page<TempUser> all = tempUserService.getAll(1, 10);
-        List<TempUser> records = all.getRecords();
+        List<TempUser> records = tempUserDAO.selectPage(new Page<>(3, 10), null).getRecords();
+
         System.out.println("records = " + records);
     }
 
