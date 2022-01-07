@@ -6,9 +6,10 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.dao.mysql.TempUserDAO;
-import com.miya.entity.easy.excel.TempUserEE;
+import com.miya.entity.easy.excel.TempUserEO;
 import com.miya.entity.model.mysql.TempUser;
 import com.miya.service.TempUserService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -80,6 +79,7 @@ public class TempUserServiceImpl implements TempUserService {
      * @param pageSize
      * @throws IOException
      */
+    @SneakyThrows
     @Override
     public void exportExcel(HttpServletResponse response, Integer pageSize) throws IOException {
 
@@ -89,7 +89,7 @@ public class TempUserServiceImpl implements TempUserService {
         int totalPageNum = pageSize % page == 0 ? pageSize / page : (pageSize / page + 1);
 
         // 读到一次，写入一次；
-        ArrayBlockingQueue<List<TempUserEE>> synchronousQueue = new ArrayBlockingQueue(1);
+        ArrayBlockingQueue<List<TempUserEO>> synchronousQueue = new ArrayBlockingQueue(1);
 
         AtomicBoolean atomicBoolean = new AtomicBoolean();
         atomicBoolean.set(true);
@@ -102,14 +102,14 @@ public class TempUserServiceImpl implements TempUserService {
                 List<TempUser> records = getAll(i, page).getRecords();
 
                 // 转换要展示的对象；
-                List<TempUserEE> collect = records.stream().map(record -> {
-                    TempUserEE tempUserEE = new TempUserEE();
-                    tempUserEE.setId(record.getId());
-                    tempUserEE.setName(record.getName());
-                    tempUserEE.setAge(record.getAge());
-                    tempUserEE.setCustom1("嘿嘿嘿");
-                    tempUserEE.setCustom2("哈哈哈");
-                    return tempUserEE;
+                List<TempUserEO> collect = records.stream().map(record -> {
+                    TempUserEO tempUserEO = new TempUserEO();
+                    tempUserEO.setId(record.getId());
+                    tempUserEO.setName(record.getName());
+                    tempUserEO.setAge(record.getAge());
+                    tempUserEO.setCustom1("嘿嘿嘿");
+                    tempUserEO.setCustom2("哈哈哈");
+                    return tempUserEO;
                 }).collect(Collectors.toList());
 
                 try {
@@ -126,31 +126,16 @@ public class TempUserServiceImpl implements TempUserService {
         });
 
 
-        ExcelWriter excelWriter = null;
-        try {
-            excelWriter = EasyExcel.write(response.getOutputStream()).head(this.head()).build();
-            WriteSheet writeSheet = EasyExcel.writerSheet("sheet-1").build();
+        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).head(this.head()).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("sheet-1").build();
 
-            // 主线程写；
-            ExcelWriter finalExcelWriter = excelWriter;
-            // 写入一个sheet；
-            try {
-                while (atomicBoolean.get()) {
-                    System.err.println("拿数据  " + Thread.currentThread().getName());
-                    List<TempUserEE> tempUserEEList = synchronousQueue.take();
-                    System.err.println("拿到数据  " + Thread.currentThread().getName());
-                    finalExcelWriter.write(tempUserEEList, writeSheet);
-                    System.err.println("写入完成  " + Thread.currentThread().getName());
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        } finally {
-            // 千万别忘记finish 会帮忙关闭流
-            if (excelWriter != null) {
-                excelWriter.finish();
-            }
+        // 写入一个sheet；
+        while (atomicBoolean.get()) {
+            System.err.println("拿数据  " + Thread.currentThread().getName());
+            List<TempUserEO> tempUserEOList = synchronousQueue.take();
+            System.err.println("拿到数据  " + Thread.currentThread().getName());
+            excelWriter.write(tempUserEOList, writeSheet);
+            System.err.println("写入完成  " + Thread.currentThread().getName());
         }
 
 

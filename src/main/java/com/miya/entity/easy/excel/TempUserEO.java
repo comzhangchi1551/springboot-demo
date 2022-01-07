@@ -12,7 +12,7 @@ import lombok.Data;
  * Date: 2021/2/22 13:41
  */
 @Data
-public class TempUserEE {
+public class TempUserEO {
 
     @ExcelProperty("主键ID")
     private Integer id;

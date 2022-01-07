@@ -3,8 +3,7 @@ package com.miya.common.easyexcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSON;
-import com.miya.dao.ck.CkUserDAO;
-import com.miya.entity.easy.excel.TempUserEE;
+import com.miya.entity.easy.excel.TempUserEO;
 import com.miya.service.TempUserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 // 有个很重要的点 TempUserListener 不能被spring管理，要每次读取excel都要new,然后里面用到spring可以构造方法传进去
 @Slf4j
-public class TempUserListener extends AnalysisEventListener<TempUserEE> {
+public class TempUserListener extends AnalysisEventListener<TempUserEO> {
 
     /**
      * 每隔5条存储数据库，实际使用中可以3000条，然后清理list，方便内存回收
@@ -21,7 +20,7 @@ public class TempUserListener extends AnalysisEventListener<TempUserEE> {
     private static final int BATCH_COUNT = 10000;
 
 
-    List<TempUserEE> list = new ArrayList<>();
+    List<TempUserEO> list = new ArrayList<>();
 
     private TempUserService tempUserService;
 
@@ -43,7 +42,7 @@ public class TempUserListener extends AnalysisEventListener<TempUserEE> {
      * @param context
      */
     @Override
-    public void invoke(TempUserEE data, AnalysisContext context) {
+    public void invoke(TempUserEO data, AnalysisContext context) {
         log.info("解析到一条数据:{}", JSON.toJSONString(data));
         list.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM

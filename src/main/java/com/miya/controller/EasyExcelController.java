@@ -4,8 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.miya.common.BaseException;
 import com.miya.common.easyexcel.TempUserListener;
-import com.miya.entity.easy.excel.TempUserEE;
-import com.miya.entity.model.mysql.TempUser;
+import com.miya.entity.easy.excel.TempUserEO;
 import com.miya.service.TempUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +72,6 @@ public class EasyExcelController {
             throw new BaseException("文件太大；");
         }
 
-        EasyExcel.read(file.getInputStream(), TempUserEE.class, new TempUserListener(tempUserService)).sheet().doRead();
+        EasyExcel.read(file.getInputStream(), TempUserEO.class, new TempUserListener(tempUserService)).sheet().doRead();
     }
 }
