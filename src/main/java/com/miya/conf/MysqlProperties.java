@@ -18,7 +18,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 /**
- * @author kangjian
+ * @author 张
  */
 @Configuration
 @MapperScan(basePackages = "com.miya.dao.mysql", sqlSessionTemplateRef  = "mysqlSqlSessionTemplate")
@@ -33,7 +33,8 @@ public class MysqlProperties {
 
     @Bean(name = "mysqlSqlSessionFactory")
     @Primary
-    public SqlSessionFactory mysqlSqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource, PaginationInterceptor paginationInterceptor) throws Exception {
+    public SqlSessionFactory mysqlSqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource,
+                                                    PaginationInterceptor paginationInterceptor) throws Exception {
         // 如果这里要使用mybatis-plus的话，一定要使用MybatisSqlSessionFactoryBean，而不是SqlSessionFactory；
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);

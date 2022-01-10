@@ -44,7 +44,8 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
      * @throws Exception
      */
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         TempUser tempUser = tempUserDAO.selectById(1);
         return tempUser;
     }
