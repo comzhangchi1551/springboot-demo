@@ -1,14 +1,15 @@
 package com.miya;
 
 import com.miya.dao.TempUserMapper;
-import com.miya.entity.model.TempUser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 @Slf4j
@@ -18,11 +19,21 @@ class ZccTempAppTests {
     @Autowired
     private TempUserMapper tempUserMapper;
 
+    @Autowired
+    private RedissonClient redissonClient;
+
     @SneakyThrows
     @Test
-    void contextLoads() {
-        List<TempUser> tempUserPage = tempUserMapper.selectAll();
-        log.info(tempUserPage.toString());
+    public void contextLoads() {
+        RBucket<Object> bucket = redissonClient.getBucket("k1");
+        bucket.set("7787", 100, TimeUnit.SECONDS);
+
+        for (int i = 0; i < 10; i++) {
+            TimeUnit.SECONDS.sleep(3);
+            RBucket<Object> k1 = redissonClient.getBucket("k1");
+            long expireTime = k1.getExpireTime();
+            System.out.println(expireTime);
+        }
     }
 
 }
