@@ -1,9 +1,6 @@
 package com.miya.entity.easy.excel;
 
-import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 /**
@@ -15,15 +12,11 @@ import lombok.Data;
 public class TempUserEO {
 
     @ExcelProperty("主键ID")
-    private Integer id;
+    private Long id;
 
     @ExcelProperty("姓名")
     private String name;
 
     @ExcelProperty("年龄")
     private Integer age;
-
-    private String custom1;
-
-    private String custom2;
 }

@@ -2,7 +2,6 @@ package com.miya.manage;
 
 import com.alibaba.excel.EasyExcel;
 import com.google.common.collect.Lists;
-import com.miya.entity.model.mysql.TempUser;
 import com.sun.mail.util.MailSSLSocketFactory;
 import lombok.SneakyThrows;
 

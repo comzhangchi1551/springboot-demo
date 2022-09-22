@@ -3,11 +3,11 @@ package com.miya.service.impl;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.miya.dao.mysql.TempUserDAO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.miya.dao.TempUserMapper;
 import com.miya.entity.easy.excel.TempUserEO;
-import com.miya.entity.model.mysql.TempUser;
+import com.miya.entity.model.TempUser;
 import com.miya.service.TempUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -34,40 +34,20 @@ import java.util.stream.Collectors;
 public class TempUserServiceImpl implements TempUserService {
 
     @Autowired
-    private TempUserDAO tempUserDAO;
+    private TempUserMapper tempUserMapper;
 
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-    @Override
-    public Integer addTempUser(List<TempUser> tempUserList) {
-        for (TempUser tempUser : tempUserList) {
-            tempUserDAO.insert(tempUser);
-        }
-        return tempUserList.size();
-    }
 
-    @Override
-    public Page<TempUser> getAll(int pageNum, int pageSize) {
-        Page<TempUser> tempUserPage = tempUserDAO.selectPage(
-                new Page<>(pageNum, pageSize),
-                new QueryWrapper<>()
-        );
+    public PageInfo<TempUser> selectByPage(int pageNum, int pageSize) {
 
-        return tempUserPage;
-    }
+        PageHelper.startPage(pageNum, pageSize);
+        List<TempUser> tempUserPage = tempUserMapper.selectAll();
+        PageInfo<TempUser> pageInfo = new PageInfo<>(tempUserPage);
 
-    @Override
-    public void insertTestData() {
-        for (int i = 0; i < 100; i++) {
-            List<TempUser> tempUserList = new ArrayList<>();
-            for (int j = 0; j < 10000; j++) {
-                tempUserList.add(new TempUser("张翅" + i + j + "Jetbrains 家的产品有一个很良心的地方，他会允许你试用 30 天（这个数字写死在代码里了）以评估是否你真的需要为它而付费。 但很多时候会出现一种情况：IDE 并不能按照我们实际的试用时间来计算。", i + j));
-            }
-            tempUserDAO.insertBatch(tempUserList);
-            log.info("插入" + (i + 1) + "万条成功！");
-        }
+        return pageInfo;
     }
 
 
@@ -81,7 +61,7 @@ public class TempUserServiceImpl implements TempUserService {
      */
     @SneakyThrows
     @Override
-    public void exportExcel(HttpServletResponse response, Integer pageSize) throws IOException {
+    public void exportExcel(HttpServletResponse response, Integer pageSize) {
 
 
         // 得到分页总数；--暂定一页1w条数据；
@@ -99,7 +79,7 @@ public class TempUserServiceImpl implements TempUserService {
             for (int i = 1; i <= totalPageNum; i++) {
                 System.out.println(i + "查询数据   " + Thread.currentThread().getName());
                 // 获取数据
-                List<TempUser> records = getAll(i, page).getRecords();
+                List<TempUser> records = selectByPage(i, page).getList();
 
                 // 转换要展示的对象；
                 List<TempUserEO> collect = records.stream().map(record -> {
@@ -107,8 +87,6 @@ public class TempUserServiceImpl implements TempUserService {
                     tempUserEO.setId(record.getId());
                     tempUserEO.setName(record.getName());
                     tempUserEO.setAge(record.getAge());
-                    tempUserEO.setCustom1("嘿嘿嘿");
-                    tempUserEO.setCustom2("哈哈哈");
                     return tempUserEO;
                 }).collect(Collectors.toList());
 

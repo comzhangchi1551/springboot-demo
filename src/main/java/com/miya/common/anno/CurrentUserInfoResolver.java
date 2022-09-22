@@ -1,7 +1,7 @@
 package com.miya.common.anno;
 
-import com.miya.dao.mysql.TempUserDAO;
-import com.miya.entity.model.mysql.TempUser;
+import com.miya.dao.TempUserMapper;
+import com.miya.entity.model.TempUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
-    private TempUserDAO tempUserDAO;
+    private TempUserMapper tempUserMapper;
 
     /**
      * 校验怎样的参数才进入解析方法；
@@ -45,8 +45,8 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        TempUser tempUser = tempUserDAO.selectById(1);
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory){
+        TempUser tempUser = tempUserMapper.selectByPrimaryKey(1L);
         return tempUser;
     }
 }

@@ -48,7 +48,7 @@ public class TempAspect {
         if (tracerEntry != null) {
             path = tracerEntry.getPath();
         }
-        log.info("请求路径[{}],入参{}", path, splitTooLongResult(argsDesc(pjp)));
+//        log.info("请求路径[{}],入参{}", path, splitTooLongResult(argsDesc(pjp)));
         Object res = null;
         try {
             res = pjp.proceed();
@@ -67,10 +67,10 @@ public class TempAspect {
                 Exception e = (Exception) res;
                 result = JSON.toJSONString(e.getMessage());
             } else {
-                result = JSON.toJSONString(res);
+                result = "success";
             }
-            log.info("请求路径[{}]--耗时[{}]--返回结果[{}]",
-                    path, tracerEntry == null ? "" : tracerEntry.release(), splitTooLongResult(result));
+            log.info("请求路径[{}]--入参[{}]--耗时[{}]--返回结果[{}]",
+                    path, splitTooLongResult(argsDesc(pjp)), tracerEntry == null ? "" : tracerEntry.release(), splitTooLongResult(result));
         }
         return res;
     }
