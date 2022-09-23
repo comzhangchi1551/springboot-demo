@@ -9,10 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.miya</groupId>
-    <artifactId>zcc-temp</artifactId>
+    <artifactId>springboot-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>zcc-temp</name>
-    <description>zcc-temp</description>
+    <name>springboot-demo</name>
     <properties>
         <java.version>1.8</java.version>
     </properties>
