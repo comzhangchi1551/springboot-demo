@@ -14,7 +14,6 @@ import java.util.List;
 @Slf4j
 class ZccTempAppTests {
 
-
     @Autowired
     private TempUserMapper tempUserMapper;
 
