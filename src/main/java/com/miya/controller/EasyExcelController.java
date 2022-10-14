@@ -6,7 +6,6 @@ import com.miya.common.BaseException;
 import com.miya.common.easyexcel.TempUserListener;
 import com.miya.entity.easy.excel.TempUserEO;
 import com.miya.service.TempUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,27 +15,26 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Desc:
- * @Author: 张翅
- * @Date: 2021/8/7 1:00
- */
+
 @RestController
 @RequestMapping("easy/excel")
 public class EasyExcelController {
 
 
-    @Autowired
-    private TempUserService tempUserService;
+    private final TempUserService tempUserService;
+
+    public EasyExcelController(TempUserService tempUserService){
+        this.tempUserService = tempUserService;
+    }
 
     /**
      * 使用easyExcel生成excel文件；
-     * @param response
-     * @throws IOException
+     * @param response 阿达
+     * @throws IOException 递四方
      */
     @GetMapping("download")
     public void download(HttpServletResponse response,
-                         @RequestParam(required = true) Integer pageSize) throws IOException {
+                         @RequestParam Integer pageSize) throws IOException {
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         try {
             response.setContentType("application/vnd.ms-excel");
@@ -52,7 +50,7 @@ public class EasyExcelController {
             response.reset();
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             map.put("status", "failure");
             map.put("message", "下载文件失败" + e.getMessage());
             response.getWriter().println(JSON.toJSONString(map));
@@ -62,8 +60,8 @@ public class EasyExcelController {
 
     /**
      * easyExcel的读；
-     * @param file
-     * @throws IOException
+     * @param file ff
+     * @throws IOException ff
      */
     @PostMapping("upload")
     public void upload(MultipartFile file) throws IOException {
