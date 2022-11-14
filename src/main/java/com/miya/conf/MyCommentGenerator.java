@@ -22,6 +22,10 @@ import java.util.Properties;
 
 import static org.mybatis.generator.internal.util.StringUtility.isTrue;
 
+
+/**
+ * mybatis-generator 生成持久层代码，并且这里可以根据mysql表生成中文注释
+ */
 public class MyCommentGenerator extends DefaultCommentGenerator {
 
     private Properties properties;
