@@ -23,8 +23,14 @@ public class RedisTemplateConf {
 
         objectJackson2JsonRedisSerializer.setObjectMapper(objectMapper);
 
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+
+        redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setValueSerializer(objectJackson2JsonRedisSerializer);
+
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashValueSerializer(objectJackson2JsonRedisSerializer);
+
         redisTemplate.afterPropertiesSet();
     }
 }
