@@ -177,7 +177,7 @@ public class HttpModel {
         } else {
             if (coupon.size() > 1) {
                 excelModel.setCouponBool("否");
-                excelModel.setCouponReason("价格解析为赠品");
+                excelModel.setCouponReason("价格解析为券");
             }
 
             if (coupon.size() == 1) {
