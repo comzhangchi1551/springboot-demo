@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -72,5 +74,111 @@ public class HttpModel {
     private static String toEmptyStr(Object obj) {
         String str = obj == null ? "" : String.valueOf(obj);
         return str;
+    }
+
+    public static ExcelModel toExcelModel(HttpModel httpModel, String code){
+        ExcelModel excelModel = new ExcelModel();
+
+
+        excelModel.setCode(code);
+
+        if (httpModel == null || CollectionUtils.isEmpty(httpModel.getObj())) {
+            excelModel.setGiftBool("否");
+            excelModel.setGiftReason("未解析出结果");
+            excelModel.setCouponBool("否");
+            excelModel.setCouponReason("未解析出结果");
+            excelModel.setPriceBool("否");
+            excelModel.setPriceReason("未解析出结果");
+            return excelModel;
+        }
+
+        List<Child> modelObj = httpModel.getObj();
+        Map<String, List<Child>> parseTypeMap = modelObj.stream().collect(Collectors.groupingBy(Child::getParseTypeEnum));
+
+        List<Child> giveaway = parseTypeMap.get("GIVEAWAY");
+        if (CollectionUtils.isEmpty(giveaway)) {
+            excelModel.setGiftBool("是");
+            excelModel.setGiftReason("");
+        } else {
+
+            if (giveaway.size() == 1) {
+                excelModel.setGiftBool("否");
+                excelModel.setGiftReason("赠品解析不全");
+            }
+
+            if (giveaway.size() == 2) {
+                excelModel.setGiftBool("否");
+                excelModel.setGiftReason("解析错误");
+            }
+
+            if (giveaway.size() == 3) {
+                int asInt = giveaway.stream().mapToInt(o->o.getParseSpecification() == null ? 0 : o.getParseSpecification()).max().getAsInt();
+                if (asInt >= 100) {
+                    excelModel.setGiftBool("否");
+                    excelModel.setGiftReason("主品解析为赠品");
+                } else {
+                    excelModel.setGiftBool("是");
+                    excelModel.setGiftReason("");
+                }
+
+            }
+
+            if (giveaway.size() > 3) {
+                excelModel.setGiftBool("否");
+                excelModel.setGiftReason("主品解析为赠品");
+            }
+
+        }
+
+        List<Child> price = parseTypeMap.get("PRICE");
+        if (CollectionUtils.isEmpty(price)) {
+            excelModel.setPriceBool("是");
+            excelModel.setPriceReason("");
+        } else {
+            if (price.size() > 1) {
+                excelModel.setPriceBool("否");
+                excelModel.setPriceReason("解析错误");
+            }else {
+                Child child = price.get(0);
+                if (child.getMatchValue() % 5 != 0 && child.getMatchValue() % 4 != 0) {
+                    excelModel.setPriceBool("否");
+                    excelModel.setPriceReason("解析错误");
+                } else {
+                    excelModel.setPriceBool("是");
+                    excelModel.setPriceReason("");
+                }
+            }
+
+        }
+
+
+        List<Child> coupon = parseTypeMap.get("COUPON");
+        if (CollectionUtils.isEmpty(coupon)) {
+            excelModel.setCouponBool("是");
+            excelModel.setCouponReason("");
+        } else {
+            if (coupon.size() > 1) {
+                excelModel.setCouponBool("否");
+                excelModel.setCouponReason("价格解析为赠品");
+            }
+
+            if (coupon.size() == 1) {
+                Child child = coupon.get(0);
+                if (child.getMatchValue() > 200) {
+                    excelModel.setCouponBool("否");
+                    excelModel.setCouponReason("价格解析为赠品");
+                } else if (child.getMatchValue() % 5 != 0 && child.getMatchValue() % 4 != 0) {
+                    excelModel.setCouponBool("否");
+                    excelModel.setCouponReason("解析错误");
+                }else {
+                    excelModel.setCouponBool("是");
+                    excelModel.setCouponReason("");
+                }
+
+            }
+
+        }
+
+        return excelModel;
     }
 }
