@@ -96,9 +96,20 @@ public class HttpModel {
         Map<String, List<Child>> parseTypeMap = modelObj.stream().collect(Collectors.groupingBy(Child::getParseTypeEnum));
 
         List<Child> giveaway = parseTypeMap.get("GIVEAWAY");
+        List<Child> price = parseTypeMap.get("PRICE");
+        List<Child> coupon = parseTypeMap.get("COUPON");
+
+
+        // 赠品
         if (CollectionUtils.isEmpty(giveaway)) {
-            excelModel.setGiftBool("是");
-            excelModel.setGiftReason("");
+            if (CollectionUtils.isEmpty(price) && CollectionUtils.isEmpty(coupon)) {
+                excelModel.setGiftBool("是");
+                excelModel.setGiftReason("");
+            } else {
+                excelModel.setGiftBool("否");
+                excelModel.setGiftReason("赠品解析不全");
+            }
+
         } else {
 
             if (giveaway.size() == 1) {
@@ -107,15 +118,21 @@ public class HttpModel {
             }
 
             if (giveaway.size() == 2) {
-                excelModel.setGiftBool("否");
-                excelModel.setGiftReason("解析错误");
+                int asInt = giveaway.stream().mapToInt(o->o.getParseSpecification() == null ? 0 : o.getParseSpecification()).max().getAsInt();
+                if (asInt >= 100) {
+                    excelModel.setGiftBool("否");
+                    excelModel.setGiftReason("解析错误");
+                } else {
+                    excelModel.setGiftBool("是");
+                    excelModel.setGiftReason("");
+                }
             }
 
             if (giveaway.size() == 3) {
                 int asInt = giveaway.stream().mapToInt(o->o.getParseSpecification() == null ? 0 : o.getParseSpecification()).max().getAsInt();
                 if (asInt >= 100) {
                     excelModel.setGiftBool("否");
-                    excelModel.setGiftReason("主品解析为赠品");
+                    excelModel.setGiftReason("解析错误");
                 } else {
                     excelModel.setGiftBool("是");
                     excelModel.setGiftReason("");
@@ -125,12 +142,13 @@ public class HttpModel {
 
             if (giveaway.size() > 3) {
                 excelModel.setGiftBool("否");
-                excelModel.setGiftReason("主品解析为赠品");
+                excelModel.setGiftReason("赠品解析过多");
             }
 
         }
 
-        List<Child> price = parseTypeMap.get("PRICE");
+
+        // 券
         if (CollectionUtils.isEmpty(price)) {
             excelModel.setPriceBool("是");
             excelModel.setPriceReason("");
@@ -140,7 +158,7 @@ public class HttpModel {
                 excelModel.setPriceReason("解析错误");
             }else {
                 Child child = price.get(0);
-                if (child.getMatchValue() % 5 != 0 && child.getMatchValue() % 4 != 0) {
+                if (child.getMatchValue() % 5 != 0) {
                     excelModel.setPriceBool("否");
                     excelModel.setPriceReason("解析错误");
                 } else {
@@ -152,7 +170,7 @@ public class HttpModel {
         }
 
 
-        List<Child> coupon = parseTypeMap.get("COUPON");
+        // 满减
         if (CollectionUtils.isEmpty(coupon)) {
             excelModel.setCouponBool("是");
             excelModel.setCouponReason("");
@@ -164,10 +182,13 @@ public class HttpModel {
 
             if (coupon.size() == 1) {
                 Child child = coupon.get(0);
-                if (child.getMatchValue() > 200) {
+                if (child.getMatchValue() == 10) {
+                    excelModel.setCouponBool("否");
+                    excelModel.setCouponReason("解析错误");
+                } else if (child.getMatchValue() > 200) {
                     excelModel.setCouponBool("否");
                     excelModel.setCouponReason("价格解析为赠品");
-                } else if (child.getMatchValue() % 5 != 0 && child.getMatchValue() % 4 != 0) {
+                } else if (child.getMatchValue() % 5 != 0) {
                     excelModel.setCouponBool("否");
                     excelModel.setCouponReason("解析错误");
                 }else {
