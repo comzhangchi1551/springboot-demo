@@ -158,6 +158,10 @@ public class HttpModel {
                 excelModel.setPriceReason("解析错误");
             }else {
                 Child child = price.get(0);
+                if (child.getMatchValue() < 10) {
+                    excelModel.setPriceBool("否");
+                    excelModel.setPriceReason("解析错误");
+                }
                 if (child.getMatchValue() % 5 != 0) {
                     excelModel.setPriceBool("否");
                     excelModel.setPriceReason("解析错误");

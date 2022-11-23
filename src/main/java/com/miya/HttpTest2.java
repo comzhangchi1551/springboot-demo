@@ -1,6 +1,8 @@
 package com.miya;
 
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import org.apache.http.Consts;
@@ -13,6 +15,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,11 +34,23 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class HttpTest2 {
 
+    static {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
+        loggerList.forEach(logger -> {
+            logger.setLevel(Level.INFO);
+        });
+    }
+
 
 
     public static void main(String[] args) throws Exception {
-        List<ExcelModel> excelModelList = extracted("mz7000-7500-5", "解析结果5.txt", "JSESSIONID=055B43CD346995A31E1DD1D45DF2A643");
-        simpleWrite("excel5.xlsx", excelModelList);
+        List<ExcelModel> excelModelList = extracted(
+                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/picture-5",
+                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/文本结果/解析结果5.txt",
+                "JSESSIONID=C9976C84C25FBBDA58FA2F69FDB73B4B"
+        );
+        simpleWrite("/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/excel结果/excel5.xlsx", excelModelList);
     }
 
 
@@ -44,7 +59,7 @@ public class HttpTest2 {
 
         // 写法1 JDK8+
         // since: 3.0.0-beta1
-        String fileName = "/Users/zhangchi/Desktop/表格结果/" + excelFileName;
+        String fileName = excelFileName;
 
         EasyExcel.write(fileName, ExcelModel.class).useDefaultStyle(false).sheet("模板").doWrite(data);
 
@@ -58,12 +73,12 @@ public class HttpTest2 {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         ArrayList<File> fileList = new ArrayList<>();
-        getAllFile(new File("/Users/zhangchi/Desktop/" + pathName), fileList);
+        getAllFile(new File(pathName), fileList);
 
         fileList.sort((a,b)->a.getName().compareTo(b.getName()));
 
 
-        File json2 = new File("/Users/zhangchi/Desktop/文本结果/" + jsonFileName);
+        File json2 = new File(jsonFileName);
         for (int i = 0; i < fileList.size(); i++) {
             File file = fileList.get(i);
             if (!file.exists() || !file.getName().endsWith("jpg")) {
@@ -108,6 +123,8 @@ public class HttpTest2 {
 
             TimeUnit.SECONDS.sleep(1);
         }
+
+        executorService.shutdown();
 
         return result;
 
