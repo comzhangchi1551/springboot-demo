@@ -107,7 +107,7 @@ public class HttpModel {
                 excelModel.setGiftReason("");
             } else {
                 excelModel.setGiftBool("否");
-                excelModel.setGiftReason("赠品解析不全");
+                excelModel.setGiftReason("解析不全");
             }
 
         } else {
@@ -132,7 +132,7 @@ public class HttpModel {
                 int asInt = giveaway.stream().mapToInt(o->o.getParseSpecification() == null ? 0 : o.getParseSpecification()).max().getAsInt();
                 if (asInt >= 100) {
                     excelModel.setGiftBool("否");
-                    excelModel.setGiftReason("解析错误");
+                    excelModel.setGiftReason("主品解析为赠品");
                 } else {
                     excelModel.setGiftBool("是");
                     excelModel.setGiftReason("");
@@ -191,7 +191,7 @@ public class HttpModel {
                     excelModel.setCouponReason("解析错误");
                 } else if (child.getMatchValue() > 200) {
                     excelModel.setCouponBool("否");
-                    excelModel.setCouponReason("价格解析为赠品");
+                    excelModel.setCouponReason("价格解析为券");
                 } else if (child.getMatchValue() % 5 != 0) {
                     excelModel.setCouponBool("否");
                     excelModel.setCouponReason("解析错误");

@@ -46,11 +46,11 @@ public class HttpTest2 {
 
     public static void main(String[] args) throws Exception {
         List<ExcelModel> excelModelList = extracted(
-                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/picture-5",
-                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/文本结果/解析结果5.txt",
-                "JSESSIONID=C9976C84C25FBBDA58FA2F69FDB73B4B"
+                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/picture-3",
+                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/文本结果/解析结果3.txt",
+                "JSESSIONID=11614D51946C3FE00A7B157E0C6CFBE1"
         );
-        simpleWrite("/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/excel结果/excel5.xlsx", excelModelList);
+        simpleWrite("/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/excel结果/excel3.xlsx", excelModelList);
     }
 
 
@@ -90,7 +90,7 @@ public class HttpTest2 {
 
             HttpModel httpModel = null;
             try {
-                AtomicReference<String> doPost = new AtomicReference<>("error");
+                AtomicReference<String> doPost = new AtomicReference<>("");
                 CountDownLatch countDownLatch = new CountDownLatch(1);
                 executorService.execute(() -> {
                     HttpTest2 test = new HttpTest2();
@@ -104,6 +104,7 @@ public class HttpTest2 {
 
                 countDownLatch.await(30, TimeUnit.SECONDS);
                 String doPostResult = doPost.get();
+                System.out.println(doPostResult);
 
                 httpModel = JSON.parseObject(doPostResult, HttpModel.class);
 
@@ -121,7 +122,7 @@ public class HttpTest2 {
                 result.add(HttpModel.toExcelModel(httpModel, fileName));
             }
 
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(2);
         }
 
         executorService.shutdown();
