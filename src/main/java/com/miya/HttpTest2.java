@@ -45,12 +45,31 @@ public class HttpTest2 {
 
 
     public static void main(String[] args) throws Exception {
+        int num = 11;
+        String path = "/Users/zhangchi/Desktop/仲裁材料/工作交付/2022-12-3工作内容";
+        String cookie = "JSESSIONID=F6E926D228FDA31421ABE67BA469DF73";
+
+
+
+        String textPath = path + "/文本结果";
+        String excelPath = path + "/excel结果";
+
+        File textFile = new File(textPath);
+        if (!textFile.exists()) {
+            textFile.mkdir();
+        }
+
+        File excelFile = new File(excelPath);
+        if (!excelFile.exists()) {
+            excelFile.mkdir();
+        }
+
         List<ExcelModel> excelModelList = extracted(
-                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/picture-3",
-                "/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/文本结果/解析结果3.txt",
-                "JSESSIONID=11614D51946C3FE00A7B157E0C6CFBE1"
+                path + "/picture-" + num,
+                textPath + "/解析结果" + num + ".txt",
+                cookie
         );
-        simpleWrite("/Users/zhangchi/Desktop/仲裁材料/工作交付/24-25工作内容/excel结果/excel3.xlsx", excelModelList);
+        simpleWrite(excelPath + "/excel" + num + ".xlsx", excelModelList);
     }
 
 
@@ -122,7 +141,7 @@ public class HttpTest2 {
                 result.add(HttpModel.toExcelModel(httpModel, fileName));
             }
 
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(3);
         }
 
         executorService.shutdown();
