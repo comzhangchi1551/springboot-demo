@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ZccTempApp {
 
     public static void main(String[] args) {
+        // 测试上传
         SpringApplication.run(ZccTempApp.class, args);
     }
 
