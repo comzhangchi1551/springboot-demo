@@ -2,6 +2,7 @@ package com.miya.dao;
 
 import com.miya.entity.model.TempUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,8 @@ public interface TempUserMapper {
     int updateByPrimaryKeySelective(TempUser record);
 
     int updateByPrimaryKey(TempUser record);
+
+    TempUser selectByName(@Param("name") String name, @Param("id") Long id);
+
+    TempUser selectDetail(@Param("name") String name);
 }

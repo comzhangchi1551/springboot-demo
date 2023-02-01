@@ -5,7 +5,10 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.miya.common.BaseException;
 import com.miya.dao.TempUserMapper;
+import com.miya.entity.dto.TempUserInsertDTO;
+import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.easy.excel.TempUserEO;
 import com.miya.entity.model.TempUser;
 import com.miya.service.TempUserService;
@@ -21,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 /**
@@ -117,6 +122,57 @@ public class TempUserServiceImpl implements TempUserService {
         }
 
 
+    }
+
+    @Override
+    public void insert(TempUserInsertDTO insertDTO) {
+        TempUser tempUser = tempUserMapper.selectByName(insertDTO.getName(), null);
+
+        if (tempUser != null) {
+            throw new BaseException("名称重复");
+        }
+
+        tempUser = new TempUser();
+        tempUser.setName(insertDTO.getName());
+        tempUser.setAge(insertDTO.getAge());
+
+        tempUserMapper.insertSelective(tempUser);
+    }
+
+
+    private static final ReentrantLock TEMP_USER_UPDATE_LOCK = new ReentrantLock();
+
+    @Override
+    public void update(TempUserUpdateDTO updateDTO) {
+        TempUser tempUser = tempUserMapper.selectByPrimaryKey(updateDTO.getId());
+        if (tempUser == null) {
+            throw new BaseException("数据不存在，无法修改");
+        }
+
+        try {
+            TEMP_USER_UPDATE_LOCK.tryLock(3, TimeUnit.SECONDS);
+
+            TempUser selectByName = tempUserMapper.selectByName(updateDTO.getName(), updateDTO.getId());
+            if (selectByName != null) {
+                throw new BaseException("姓名重复");
+            }
+
+            tempUser.setName(updateDTO.getName());
+            tempUser.setAge(updateDTO.getAge());
+            tempUserMapper.updateByPrimaryKeySelective(tempUser);
+
+        } catch (InterruptedException e) {
+            throw new BaseException("获取锁异常");
+        } finally {
+            TEMP_USER_UPDATE_LOCK.unlock();
+        }
+
+    }
+
+    @Override
+    public TempUser detail(String name) {
+        TempUser tempUser = tempUserMapper.selectDetail(name);
+        return tempUser;
     }
 
 
