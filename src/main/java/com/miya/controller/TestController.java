@@ -58,4 +58,13 @@ public class TestController {
         TempUser tempUser = tempUserService.detail(name);
         return BaseResult.success(tempUser);
     }
+
+    @GetMapping("data")
+    public BaseResult getData(){
+        TempUser tempUser = new TempUser();
+        tempUser.setId(12L);
+        tempUser.setName("镇恶犯");
+        tempUser.setAge(14);
+        return BaseResult.success(tempUser);
+    }
 }
