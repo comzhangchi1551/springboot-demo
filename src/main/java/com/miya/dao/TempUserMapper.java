@@ -3,10 +3,12 @@ package com.miya.dao;
 import com.miya.entity.model.TempUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Mapper
+@Repository
 public interface TempUserMapper {
 
     List<TempUser> selectAll();
