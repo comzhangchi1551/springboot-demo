@@ -2,7 +2,6 @@ package com.miya.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.miya.entity.model.PsdGroup;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 * @createDate 2023-04-21 16:33:30
 * @Entity com.miya.entity/model.Group
 */
-@Mapper
 @Repository
 public interface GroupMapper extends BaseMapper<PsdGroup> {
 

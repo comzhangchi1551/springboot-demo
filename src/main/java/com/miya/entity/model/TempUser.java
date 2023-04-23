@@ -9,7 +9,7 @@ public class TempUser {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String name;
+    private String username;
 
     private Integer age;
 }

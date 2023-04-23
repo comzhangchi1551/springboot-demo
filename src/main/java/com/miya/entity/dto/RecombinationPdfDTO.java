@@ -1,6 +1,8 @@
 package com.miya.entity.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -36,6 +38,8 @@ public class RecombinationPdfDTO implements Serializable {
      * 绑定dto
      */
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class BindingsDTO {
         /**
          * 绑定唯一Id
@@ -58,6 +62,8 @@ public class RecombinationPdfDTO implements Serializable {
      * 图层组dto
      */
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class LayerGroupDTO {
         /**
          * 分组唯一Id

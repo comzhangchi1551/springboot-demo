@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 分组和图层中间表
  * @TableName group_layer_relation
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupLayerRelation implements Serializable {
     /**
      * 

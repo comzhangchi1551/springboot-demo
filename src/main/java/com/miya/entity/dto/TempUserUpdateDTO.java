@@ -17,7 +17,7 @@ public class TempUserUpdateDTO {
     private Long id;
 
     @NotBlank
-    private String name;
+    private String username;
 
     @NotNull
     private Integer age;

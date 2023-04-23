@@ -46,7 +46,7 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory){
-        TempUser tempUser = tempUserMapper.selectByPrimaryKey(1L);
+        TempUser tempUser = tempUserMapper.selectById(1L);
         return tempUser;
     }
 }

@@ -1,6 +1,5 @@
 package com.miya.entity.dto;
 
-import com.miya.entity.model.TempUser;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -15,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class TempUserInsertDTO{
 
     @NotBlank
-    private String name;
+    private String username;
 
     @NotNull
     private Integer age;
