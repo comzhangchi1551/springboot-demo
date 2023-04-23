@@ -204,21 +204,23 @@
 
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>minth</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <profiles.active>dev</profiles.active>
+                <profiles.active>minth</profiles.active>
             </properties>
         </profile>
 
         <profile>
-            <id>prod</id>
+            <id>tencent</id>
             <properties>
-                <profiles.active>prod</profiles.active>
+                <profiles.active>tencent</profiles.active>
             </properties>
         </profile>
     </profiles>
+
+
 
 </project>
