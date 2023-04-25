@@ -30,4 +30,6 @@ logging:
     com:
       miya:
         dao: debug
-
+mybatis-plus:
+  configuration:
+    lazy-loading-enabled: true
