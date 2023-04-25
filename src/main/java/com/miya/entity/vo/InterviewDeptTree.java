@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class InterviewDeptTree {
 
-    private String value;
+    private String label;
 
-    private List<InterviewDeptTree> child;
+    private List<InterviewDeptTree> value;
 }
