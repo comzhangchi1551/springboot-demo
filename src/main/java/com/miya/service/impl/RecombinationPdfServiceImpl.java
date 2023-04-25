@@ -1,5 +1,6 @@
 package com.miya.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.miya.dao.*;
 import com.miya.entity.dto.RecombinationPdfDTO;
 import com.miya.entity.model.*;
@@ -34,15 +35,18 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
     private BindingLayerRelationMapper bindingLayerRelationMapper;
 
     @Autowired
+    private PsdWaterfallFlowMapper psdWaterfallFlowMapper;
+
+    @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 
 
     @Override
     @Transactional
-    public void recombination(RecombinationPdfDTO recombinationPdfDTO) {
+    public void addPsdProject(RecombinationPdfDTO recombinationPdfDTO) {
         Map<Long, GroupLayerRelation> layerIdGroupLayerRelationMap = new HashMap<>();
-        insertData(recombinationPdfDTO, layerIdGroupLayerRelationMap);
+        Long psdProjectId = insertData(recombinationPdfDTO, layerIdGroupLayerRelationMap);
 
         threadPoolTaskExecutor.execute(() -> {
             Map<Long, List<GroupLayerRelation>> buildBindingMap =
@@ -52,13 +56,19 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
                     recombinationPdfDTO.getLayerGroupDTOList().stream().collect(Collectors.toMap(RecombinationPdfDTO.LayerGroupDTO::getSort, o -> o));
 
             List<List<Long>> result = new ArrayList<>();
-            Map.Entry<Integer, RecombinationPdfDTO.LayerGroupDTO> groupDTOEntry =
-                    sortGroupMap.entrySet().stream().min((a, b) -> a.getKey().compareTo(b.getKey())).get();
 
-            generateWaterfallFlow(sortGroupMap, groupDTOEntry.getKey(), buildBindingMap, new Stack<Long>(), new Stack<>(), new Stack<>(), result);
+            Integer minKey = sortGroupMap.keySet().stream().min((a, b) -> a.compareTo(b)).get();
 
+            generateWaterfallFlow(sortGroupMap, minKey, buildBindingMap, new Stack<Long>(), new Stack<>(), new Stack<>(), result);
+
+
+            PsdWaterfallFlow psdWaterfallFlow = new PsdWaterfallFlow();
+            psdWaterfallFlow.setPsdProjectId(psdProjectId);
+            psdWaterfallFlow.setImageIds(JSON.toJSONString(result));
+            psdWaterfallFlow.setVersion(UUID.randomUUID().toString());
             log.info("result = " + result);
 
+            psdWaterfallFlowMapper.insert(psdWaterfallFlow);
         });
     }
 
@@ -182,7 +192,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
      *
      * @param recombinationPdfDTO
      */
-    private void insertData(RecombinationPdfDTO recombinationPdfDTO, Map<Long, GroupLayerRelation> groupLayerRelationMap) {
+    private Long insertData(RecombinationPdfDTO recombinationPdfDTO, Map<Long, GroupLayerRelation> groupLayerRelationMap) {
         Date now = new Date();
 
 
@@ -204,14 +214,15 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
             groupMapper.insert(psdGroup);
             groupDTO.setGroupId(psdGroup.getId());
 
-            Set<Long> layerIdSet = groupDTO.getLayerIdSet();
-            for (Long layerId : layerIdSet) {
+            List<GroupLayerRelation> groupLayerRelationList = groupDTO.getLayerIdSet().stream().map(layerId -> {
                 GroupLayerRelation groupLayerRelation = new GroupLayerRelation();
                 groupLayerRelation.setGroupId(psdGroup.getId());
                 groupLayerRelation.setLayerId(layerId);
-                groupLayerRelationMapper.insert(groupLayerRelation);
-                groupLayerRelationMap.put(groupLayerRelation.getLayerId(), groupLayerRelation);
-            }
+                groupLayerRelationMap.put(layerId, groupLayerRelation);
+                return groupLayerRelation;
+            }).collect(Collectors.toList());
+
+            groupLayerRelationMapper.insertBatch(groupLayerRelationList);
         }
 
         // 持久化绑定和图层数据
@@ -223,18 +234,17 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
                 psdBinding.setBindingName(bindingsDTO.getBindingName());
                 bindingMapper.insert(psdBinding);
 
-                // bindingId持久化之后，将id会写到dto中，后续做瀑布流方便分组；
-                bindingsDTO.setBindingId(psdBinding.getId());
 
-
-                Set<Long> layerIdSet = bindingsDTO.getLayerIdSet();
-                for (Long layerId : layerIdSet) {
+                List<BindingLayerRelation> bindingLayerRelationList = bindingsDTO.getLayerIdSet().stream().map(layerId -> {
                     BindingLayerRelation bindingLayerRelation = new BindingLayerRelation();
                     bindingLayerRelation.setBindingId(psdBinding.getId());
                     bindingLayerRelation.setLayerId(layerId);
-                    bindingLayerRelationMapper.insert(bindingLayerRelation);
-                }
+                    return bindingLayerRelation;
+                }).collect(Collectors.toList());
+                bindingLayerRelationMapper.insertBatch(bindingLayerRelationList);
             }
         }
+
+        return psdProject.getId();
     }
 }

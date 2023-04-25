@@ -44,7 +44,7 @@ public class RecombinationPdfDTO implements Serializable {
         /**
          * 绑定唯一Id
          */
-        private Long bindingId;
+//        private Long bindingId;
 
         @NotBlank
         private String bindingName;

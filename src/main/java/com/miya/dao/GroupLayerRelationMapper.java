@@ -3,7 +3,10 @@ package com.miya.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.miya.entity.model.GroupLayerRelation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
 * @author 10100769
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GroupLayerRelationMapper extends BaseMapper<GroupLayerRelation> {
 
+    void insertBatch(@Param("groupLayerRelationList") List<GroupLayerRelation> groupLayerRelationList);
 }
 
 

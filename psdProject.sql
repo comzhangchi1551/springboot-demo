@@ -50,3 +50,15 @@ create table psd_project
     del_flag     tinyint      default 0                 not null comment '是否删除0：未删除，1：已删除'
 );
 
+
+create table psd_waterfall_flow
+(
+    id             bigint auto_increment
+        primary key,
+    psd_project_id bigint                  not null,
+    image_ids      text                    not null,
+    version        varchar(255) default '' not null,
+    del_flag       tinyint      default 0  not null
+);
+
+

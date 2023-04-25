@@ -13,16 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequestMapping("pdf")
+@RequestMapping("psd")
 @Validated
 public class PdfDemoController {
 
     @Autowired
     private RecombinationPdfService recombinationPdfService;
 
-    @PostMapping("recombination")
-    public BaseResult recombinationPdf(@RequestBody @Validated RecombinationPdfDTO recombinationPdfDTO){
-        recombinationPdfService.recombination(recombinationPdfDTO);
+    @PostMapping("addPsdProject")
+    public BaseResult addPsdProject(@RequestBody @Validated RecombinationPdfDTO recombinationPdfDTO){
+        recombinationPdfService.addPsdProject(recombinationPdfDTO);
         return BaseResult.success();
     }
+
+
+
+
 }

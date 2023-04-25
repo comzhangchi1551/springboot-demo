@@ -15,4 +15,17 @@
         id,group_id,layer_id,
         del_flag
     </sql>
+
+    <insert id="insertBatch" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+
+        <if test="groupLayerRelationList != null and groupLayerRelationList.size > 0">
+            insert into
+            group_layer_relation(group_id, layer_id)
+            values
+            <foreach collection="groupLayerRelationList" item="item" separator=",">
+                (#{item.groupId}, #{item.layerId})
+            </foreach>
+        </if>
+
+    </insert>
 </mapper>

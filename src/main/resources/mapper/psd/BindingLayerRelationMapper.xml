@@ -15,4 +15,15 @@
         id,binding_id,layer_id,
         del_flag
     </sql>
+
+    <insert id="insertBatch" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        <if test="bindingLayerRelationList != null and bindingLayerRelationList.size > 0">
+            insert into
+            binding_layer_relation(binding_id, layer_id)
+            values
+            <foreach collection="bindingLayerRelationList" item="item" separator=",">
+                (#{item.bindingId}, #{item.layerId})
+            </foreach>
+        </if>
+    </insert>
 </mapper>
