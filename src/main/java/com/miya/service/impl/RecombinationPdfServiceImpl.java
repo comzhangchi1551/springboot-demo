@@ -111,7 +111,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
                 }
 
                 // 3. 已选图层所在分组的其他图层的绑定关系中，包含当前图层
-                if (otherLayerBindingSet.contains(layerId)) {
+                if (otherLayerBindingSet.stream().anyMatch(groupLayerRelation -> groupLayerRelation.getLayerId().equals(layerId))) {
                     continue;
                 }
 
