@@ -1,6 +1,7 @@
 package com.miya.service;
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.miya.entity.dto.TempUserInsertDTO;
 import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.model.TempUser;
@@ -8,9 +9,9 @@ import com.miya.entity.model.TempUser;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public interface TempUserService {
+public interface TempUserService extends IService<TempUser> {
 
-    PageInfo<TempUser> selectByPage(int pageNum, int pageSize);
+    Page<TempUser> selectByPage(int pageNum, int pageSize);
 
     void exportExcel(HttpServletResponse response, Integer pageSize) throws IOException;
 
@@ -18,5 +19,5 @@ public interface TempUserService {
 
     void update(TempUserUpdateDTO updateDTO);
 
-    TempUser detail(String name);
+    Page<TempUser> selectList(Integer pageNum, Integer pageSize, String keyword);
 }

@@ -1,29 +1,16 @@
 package com.miya.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.entity.model.TempUser;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
-@Mapper
-public interface TempUserMapper {
+@Repository
+public interface TempUserMapper extends BaseMapper<TempUser> {
 
-    List<TempUser> selectAll();
+    Page<TempUser> selectPageCustom(IPage<?> page, @Param("username") String username);
 
-    int deleteByPrimaryKey(Long id);
-
-    int insert(TempUser record);
-
-    int insertSelective(TempUser record);
-
-    TempUser selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(TempUser record);
-
-    int updateByPrimaryKey(TempUser record);
-
-    TempUser selectByName(@Param("name") String name, @Param("id") Long id);
-
-    TempUser selectDetail(@Param("name") String name);
 }

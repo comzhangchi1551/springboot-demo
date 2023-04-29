@@ -3,8 +3,10 @@ package com.miya.service.impl;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miya.common.BaseException;
 import com.miya.dao.TempUserMapper;
 import com.miya.entity.dto.TempUserInsertDTO;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class TempUserServiceImpl implements TempUserService {
+public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> implements TempUserService {
 
     @Autowired
     private TempUserMapper tempUserMapper;
@@ -46,13 +48,10 @@ public class TempUserServiceImpl implements TempUserService {
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 
-    public PageInfo<TempUser> selectByPage(int pageNum, int pageSize) {
-
-        PageHelper.startPage(pageNum, pageSize);
-        List<TempUser> tempUserPage = tempUserMapper.selectAll();
-        PageInfo<TempUser> pageInfo = new PageInfo<>(tempUserPage);
-
-        return pageInfo;
+    public Page<TempUser> selectByPage(int pageNum, int pageSize) {
+        Page<TempUser> page = PageDTO.of(pageNum, pageSize);
+        page = tempUserMapper.selectPage(page, null);
+        return page;
     }
 
 
@@ -84,13 +83,13 @@ public class TempUserServiceImpl implements TempUserService {
             for (int i = 1; i <= totalPageNum; i++) {
                 System.out.println(i + "查询数据   " + Thread.currentThread().getName());
                 // 获取数据
-                List<TempUser> records = selectByPage(i, page).getList();
+                List<TempUser> records = selectByPage(i, page).getRecords();
 
                 // 转换要展示的对象；
                 List<TempUserEO> collect = records.stream().map(record -> {
                     TempUserEO tempUserEO = new TempUserEO();
                     tempUserEO.setId(record.getId());
-                    tempUserEO.setName(record.getName());
+                    tempUserEO.setName(record.getUsername());
                     tempUserEO.setAge(record.getAge());
                     return tempUserEO;
                 }).collect(Collectors.toList());
@@ -126,17 +125,21 @@ public class TempUserServiceImpl implements TempUserService {
 
     @Override
     public void insert(TempUserInsertDTO insertDTO) {
-        TempUser tempUser = tempUserMapper.selectByName(insertDTO.getName(), null);
+        TempUser tempUser = tempUserMapper.selectOne(
+                new LambdaQueryWrapper<TempUser>()
+                        .eq(TempUser::getUsername, insertDTO.getUsername())
+                        .last("limit 1")
+        );
 
         if (tempUser != null) {
             throw new BaseException("名称重复");
         }
 
         tempUser = new TempUser();
-        tempUser.setName(insertDTO.getName());
+        tempUser.setUsername(insertDTO.getUsername());
         tempUser.setAge(insertDTO.getAge());
 
-        tempUserMapper.insertSelective(tempUser);
+        tempUserMapper.insert(tempUser);
     }
 
 
@@ -144,22 +147,27 @@ public class TempUserServiceImpl implements TempUserService {
 
     @Override
     public void update(TempUserUpdateDTO updateDTO) {
-        TempUser tempUser = tempUserMapper.selectByPrimaryKey(updateDTO.getId());
+        TempUser tempUser = tempUserMapper.selectById(updateDTO.getId());
         if (tempUser == null) {
             throw new BaseException("数据不存在，无法修改");
         }
 
         try {
             TEMP_USER_UPDATE_LOCK.tryLock(3, TimeUnit.SECONDS);
+            TempUser selectByName = tempUserMapper.selectOne(
+                    new LambdaQueryWrapper<TempUser>()
+                            .eq(TempUser::getUsername, updateDTO.getUsername())
+                            .ne(TempUser::getId, updateDTO.getId())
+                            .last("limit 1")
+            );
 
-            TempUser selectByName = tempUserMapper.selectByName(updateDTO.getName(), updateDTO.getId());
             if (selectByName != null) {
                 throw new BaseException("姓名重复");
             }
 
-            tempUser.setName(updateDTO.getName());
+            tempUser.setUsername(updateDTO.getUsername());
             tempUser.setAge(updateDTO.getAge());
-            tempUserMapper.updateByPrimaryKeySelective(tempUser);
+            tempUserMapper.updateById(tempUser);
 
         } catch (InterruptedException e) {
             throw new BaseException("获取锁异常");
@@ -170,9 +178,9 @@ public class TempUserServiceImpl implements TempUserService {
     }
 
     @Override
-    public TempUser detail(String name) {
-        TempUser tempUser = tempUserMapper.selectDetail(name);
-        return tempUser;
+    public Page<TempUser> selectList(Integer pageNum, Integer pageSize, String keyword) {
+        Page<TempUser> tempUserMapperPage = tempUserMapper.selectPageCustom(PageDTO.of(pageNum, pageSize), keyword);
+        return tempUserMapperPage;
     }
 
 

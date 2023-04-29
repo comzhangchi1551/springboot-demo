@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miya.dao.InterviewUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.miya.entity.model.InterviewUser">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="username" column="name" jdbcType="VARCHAR"/>
+            <result property="pwd" column="pwd" jdbcType="VARCHAR"/>
+            <result property="headImg" column="head_img" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+            <result property="mgrId" column="mgr_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,pwd,
+        head_img,phone,dept_id,
+        mgr_id,create_time,del_flag
+    </sql>
+
+
+    <select id="selectUserVO" resultType="com.miya.entity.vo.InterviewUserVO">
+        select
+            iu.id,
+            iu.username,
+            iu.head_img headImg,
+            iu.phone,
+            d.id deptId,
+            d.dept_name deptName,
+            d2.dept_name parentDeptName,
+            iu2.id mgrId,
+            iu2.username mgrName,
+            iu.create_time createTime
+        from interview_user iu
+        left join interview_dept d on iu.dept_id = d.id and (d.del_flag = 0 or d.del_flag is null)
+        left join interview_dept d2 on d.parent_id = d2.id and d2.del_flag = 0
+        left join interview_user iu2 on iu.mgr_id = iu2.id and iu2.del_flag = 0
+        where iu.del_flag = 0
+
+        <if test="keyword != null and keyword != ''">
+            and (
+            iu.username like concat('%', #{keyword}, '%')
+            or iu.phone like concat('%', #{keyword}, '%')
+            or d.dept_name like concat('%', #{keyword}, '%')
+            or d2.dept_name like concat('%', #{keyword}, '%')
+            or iu2.username like concat('%', #{keyword}, '%')
+            )
+        </if>
+
+    </select>
+
+
+</mapper>
