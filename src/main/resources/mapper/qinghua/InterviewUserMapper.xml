@@ -36,10 +36,11 @@
             iu2.username mgrName,
             iu.create_time createTime
         from interview_user iu
-        left join interview_dept d on iu.dept_id = d.id and d.del_flag = 0
+        left join interview_dept d on iu.dept_id = d.id and (d.del_flag = 0 or d.del_flag is null)
         left join interview_dept d2 on d.parent_id = d2.id and d2.del_flag = 0
         left join interview_user iu2 on iu.mgr_id = iu2.id and iu2.del_flag = 0
         where iu.del_flag = 0
+
         <if test="keyword != null and keyword != ''">
             and (
             iu.username like concat('%', #{keyword}, '%')

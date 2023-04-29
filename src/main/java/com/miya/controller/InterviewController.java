@@ -3,6 +3,7 @@ package com.miya.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.common.BaseResult;
 import com.miya.entity.vo.InterviewDeptTree;
+import com.miya.entity.vo.InterviewUserRoleVO;
 import com.miya.entity.vo.InterviewUserVO;
 import com.miya.service.InterviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,12 @@ public class InterviewController {
                                     @RequestParam(defaultValue = "10", required = false) Integer pageSize){
         Page<InterviewUserVO> page = interviewService.selectUserList(keyword, pageNum, pageSize);
         return BaseResult.success(page);
+    }
+
+
+    @GetMapping("userRoleList")
+    public BaseResult queryUserRoleList(){
+        List<InterviewUserRoleVO> result = interviewService.selectUserRoleList();
+        return BaseResult.success(result);
     }
 }

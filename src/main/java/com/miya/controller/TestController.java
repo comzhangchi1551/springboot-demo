@@ -45,7 +45,7 @@ public class TestController {
     }
 
     @PostMapping("update")
-    public BaseResult update(TempUserUpdateDTO updateDTO) {
+    public BaseResult update(@RequestBody @Validated TempUserUpdateDTO updateDTO) {
         tempUserService.update(updateDTO);
         return BaseResult.success();
     }

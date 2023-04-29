@@ -35,9 +35,6 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
     private BindingLayerRelationMapper bindingLayerRelationMapper;
 
     @Autowired
-    private PsdWaterfallFlowMapper psdWaterfallFlowMapper;
-
-    @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 
@@ -68,7 +65,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
             psdWaterfallFlow.setVersion(UUID.randomUUID().toString());
             log.info("result = " + result);
 
-            psdWaterfallFlowMapper.insert(psdWaterfallFlow);
+//            psdWaterfallFlowMapper.insert(psdWaterfallFlow);
         });
     }
 
@@ -111,7 +108,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
                 }
 
                 // 3. 已选图层所在分组的其他图层的绑定关系中，包含当前图层
-                if (otherLayerBindingSet.contains(layerId)) {
+                if (otherLayerBindingSet.stream().anyMatch(groupLayerRelation -> groupLayerRelation.getLayerId().equals(layerId))) {
                     continue;
                 }
 
