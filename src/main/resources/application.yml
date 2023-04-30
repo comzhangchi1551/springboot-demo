@@ -43,8 +43,19 @@ spring:
       connection-timeout: 30000
 #     心跳机制sql
       connection-test-query: SELECT 1
-  thymeleaf:
-    cache: false
+  redis:
+    host: 43.142.243.245
+    port: 6379
+    username: default
+    password: 12345678
+    database: 0
+    connect-timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: 10000ms
+        max-idle: 200
+        min-idle: 5
 
 # 日志debug显示
 logging:

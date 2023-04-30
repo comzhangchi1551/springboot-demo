@@ -2,10 +2,10 @@ package com.miya.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.miya.dao.InterviewDeptMapper;
-import com.miya.dao.InterviewRoleMapper;
-import com.miya.dao.InterviewUserMapper;
-import com.miya.dao.InterviewUserRoleMapper;
+import com.miya.mapper.InterviewDeptMapper;
+import com.miya.mapper.InterviewRoleMapper;
+import com.miya.mapper.InterviewUserMapper;
+import com.miya.mapper.InterviewUserRoleMapper;
 import com.miya.entity.model.InterviewDept;
 import com.miya.entity.model.InterviewRole;
 import com.miya.entity.model.InterviewUser;

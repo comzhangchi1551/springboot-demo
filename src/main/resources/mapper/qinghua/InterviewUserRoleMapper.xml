@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.miya.dao.InterviewUserRoleMapper">
+<mapper namespace="com.miya.mapper.InterviewUserRoleMapper">
 
     <resultMap id="BaseResultMap" type="com.miya.entity.model.InterviewUserRole">
             <id property="id" column="id" jdbcType="BIGINT"/>

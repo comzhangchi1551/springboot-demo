@@ -1,4 +1,4 @@
-package com.miya.entity;
+package com.miya.common.processor;
 
 import com.miya.entity.model.TempUser;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
-public class LocalBeanPostProcessor2 implements BeanPostProcessor {
+public class LocalBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if (bean.getClass() == TempUser.class) {
-            log.info("Before ---> TempUser22222");
+            log.info("Before ---> TempUser");
         }
         return bean;
     }
@@ -20,7 +20,7 @@ public class LocalBeanPostProcessor2 implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean.getClass() == TempUser.class) {
-            log.info("After ---> TempUser22222");
+            log.info("After ---> TempUser");
         }
         return bean;
     }

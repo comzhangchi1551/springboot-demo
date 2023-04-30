@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miya.common.BaseException;
-import com.miya.dao.TempUserMapper;
+import com.miya.mapper.TempUserMapper;
 import com.miya.entity.dto.TempUserInsertDTO;
 import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.easy.excel.TempUserEO;

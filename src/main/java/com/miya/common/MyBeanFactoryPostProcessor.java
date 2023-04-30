@@ -1,4 +1,4 @@
-package com.miya.conf;
+package com.miya.common;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,15 +13,11 @@ import org.springframework.stereotype.Component;
 public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        System.out.println("---------------->>>>>>>>>>>>>>>");
-    }
-
-    public void t1(){
-        System.out.println("eeee");
+        System.out.println("----------------postProcessBeanFactory----------------");
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("------------------------------<<<<<<<<<<<<<<<<<<<");
+        System.out.println("-----------------afterPropertiesSet-----------------");
     }
 }

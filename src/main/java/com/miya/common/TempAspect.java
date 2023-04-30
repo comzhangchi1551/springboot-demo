@@ -48,7 +48,7 @@ public class TempAspect {
         if (tracerEntry != null) {
             path = tracerEntry.getPath();
         }
-//        log.info("请求路径[{}],入参{}", path, splitTooLongResult(argsDesc(pjp)));
+        log.info("请求路径[{}],入参{}", path, splitTooLongResult(argsDesc(pjp)));
         Object res = null;
         try {
             res = pjp.proceed();

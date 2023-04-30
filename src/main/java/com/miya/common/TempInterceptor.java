@@ -17,18 +17,18 @@ public class TempInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        log.error("preHandle");
+        log.info("===== preHandle =====");
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-//        log.error("postHandle");
+        log.info("===== postHandle =====");
 
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-//        log.error("afterCompletion");
+        log.info("===== afterCompletio =====");
     }
 }

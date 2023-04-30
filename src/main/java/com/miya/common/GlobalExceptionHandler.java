@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     public BaseResult<Void> exception(Exception e, ServletWebRequest request) {
         log.error("应用程序未知异常[{}],请求路径[{}]", e.getMessage(), getRequestPath(request), e);
-        return BaseResult.error(e.getMessage());
+        return BaseResult.error("内部错误");
     }
 
     /**
@@ -90,12 +90,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {MultipartException.class})
     public BaseResult<Void> multipartException(MultipartException e, ServletWebRequest request) {
-        log.info("请求方法不支持[{}],请求路径[{}]", e.getMessage(), getRequestPath(request));
+        log.info("[{}],请求路径[{}]", e.getMessage(), getRequestPath(request));
         return BaseResult.error(e.getMessage());
     }
 
     /**
-     * spring mvc抛出 请求方法不支持
+     * spring mvc抛出 MediaType不支持
      *
      * @param e
      * @param request
@@ -183,13 +183,15 @@ public class GlobalExceptionHandler {
      * @throws Exception
      */
     @ExceptionHandler(value= MethodArgumentNotValidException.class)
-    public BaseResult MethodArgumentNotValidHandler(MethodArgumentNotValidException exception) {
-        StringJoiner stringJoiner = new StringJoiner(": ");
+    public BaseResult MethodArgumentNotValidHandler(MethodArgumentNotValidException exception, ServletWebRequest request) {
+        StringJoiner stringJoiner = new StringJoiner(", ");
         // 只返回第一个错误信息即可；
         for (FieldError error : exception.getBindingResult().getFieldErrors()) {
-            stringJoiner.add(error.getField()).add(error.getDefaultMessage());
-            break;
+            stringJoiner.add(error.getField()+ ": " +error.getDefaultMessage());
+//            break;
         }
+
+        log.info("参数校验异常[{}]，请求路径[{}]", stringJoiner.toString(), getRequestPath(request));
         return BaseResult.error(stringJoiner.toString());
     }
 

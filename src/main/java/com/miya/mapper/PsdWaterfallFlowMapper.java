@@ -1,4 +1,4 @@
-package com.miya.dao;
+package com.miya.mapper;
 
 import com.miya.entity.model.PsdWaterfallFlow;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

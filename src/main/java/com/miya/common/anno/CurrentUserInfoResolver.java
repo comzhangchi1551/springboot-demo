@@ -1,7 +1,8 @@
 package com.miya.common.anno;
 
-import com.miya.dao.TempUserMapper;
-import com.miya.entity.model.TempUser;
+import com.miya.entity.cost.SeckillLoginCost;
+import com.miya.entity.model.SeckillUser;
+import com.miya.service.SeckillUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Auth: 张
@@ -19,7 +23,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
-    private TempUserMapper tempUserMapper;
+    private SeckillUserService seckillUserService;
 
     /**
      * 校验怎样的参数才进入解析方法；
@@ -29,7 +33,7 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(TempUser.class)
+        return parameter.getParameterType().isAssignableFrom(SeckillUser.class)
                 && parameter.hasParameterAnnotation(CurrentUserInfo.class);
     }
 
@@ -43,10 +47,22 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
      * @return
      * @throws Exception
      */
-    @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory){
-        TempUser tempUser = tempUserMapper.selectById(1L);
-        return tempUser;
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+
+        String cookieToken = getCookieValue(request, SeckillLoginCost.LOGIN_COOKIE_NAME);
+        SeckillUser user = seckillUserService.selectSeckillUserFromRedis(cookieToken);
+        return user;
+    }
+
+    private String getCookieValue(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(cookieName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }

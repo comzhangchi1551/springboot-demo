@@ -1,4 +1,4 @@
-package com.miya.entity;
+package com.miya.common.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
-public class LocalBeanFactoryPostProcessor2 implements BeanFactoryPostProcessor {
+public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        log.info("------------- LocalBeanFactoryPostProcessor222222 --------------");
+        log.info("------------- LocalBeanFactoryPostProcessor --------------");
     }
 }
