@@ -1,16 +1,23 @@
 package com.miya.common.processor;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Slf4j
-@Configuration
-public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+/**
+ * 自定义 BeanFactoryPostProcessor
+ */
+@Component
+public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        log.info("------------- LocalBeanFactoryPostProcessor --------------");
+        System.out.println("----------------postProcessBeanFactory----------------");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("-----------------afterPropertiesSet-----------------");
     }
 }

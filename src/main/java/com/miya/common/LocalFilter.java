@@ -18,8 +18,8 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-@WebFilter(urlPatterns = "/**", filterName = "TempFilter")
-public class TempFilter implements Filter {
+@WebFilter(urlPatterns = "/**", filterName = "LocalFilter")
+public class LocalFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

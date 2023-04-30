@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miya.mapper.SGoodsMapper">
+
+    <resultMap id="BaseResultMap" type="com.miya.entity.model.SGoods">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="goodsTitle" column="goods_title" jdbcType="VARCHAR"/>
+            <result property="goodsImg" column="goods_img" jdbcType="VARCHAR"/>
+            <result property="goodsDetail" column="goods_detail" jdbcType="VARCHAR"/>
+            <result property="goodsPrice" column="goods_price" jdbcType="DECIMAL"/>
+            <result property="goodsStock" column="goods_stock" jdbcType="INTEGER"/>
+            <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,goods_name,goods_title,
+        goods_img,goods_detail,goods_price,
+        goods_stock,del_flag
+    </sql>
+
+
+    <select id="getGoodsList" resultType="com.miya.entity.vo.seckill.SGoodsVO">
+        select sg.id,
+               sg.goods_name,
+               sg.goods_title,
+               sg.goods_img,
+               sg.goods_detail,
+               sg.goods_price,
+               sg.goods_stock,
+               sg.del_flag,
+               ssg.seckill_price,
+               ssg.stock_count,
+               ssg.start_time,
+               ssg.end_time
+        from s_goods sg
+            left join s_seckill_goods ssg on sg.id = ssg.s_goods_id and ssg.del_flag = 0
+        where sg.del_flag = 0
+    </select>
+
+    <select id="selectGoodsVO" resultType="com.miya.entity.vo.seckill.SGoodsVO">
+        select sg.id,
+               sg.goods_name,
+               sg.goods_title,
+               sg.goods_img,
+               sg.goods_detail,
+               sg.goods_price,
+               sg.goods_stock,
+               sg.del_flag,
+               ssg.seckill_price,
+               ssg.stock_count,
+               ssg.start_time,
+               ssg.end_time
+        from s_goods sg
+                 left join s_seckill_goods ssg on sg.id = ssg.s_goods_id and ssg.del_flag = 0
+        where sg.del_flag = 0
+            and sg.id = #{goodsId}
+    </select>
+</mapper>

@@ -1,9 +1,9 @@
 package com.miya.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.miya.entity.vo.InterviewDeptTree;
-import com.miya.entity.vo.InterviewUserRoleVO;
-import com.miya.entity.vo.InterviewUserVO;
+import com.miya.entity.vo.interview.InterviewDeptTree;
+import com.miya.entity.vo.interview.InterviewUserRoleVO;
+import com.miya.entity.vo.interview.InterviewUserVO;
 
 import java.util.List;
 

@@ -66,4 +66,5 @@ logging:
 mybatis-plus:
   configuration:
     lazy-loading-enabled: true
+    map-underscore-to-camel-case: true
   mapper-locations: classpath*:/mapper/**/*.xml

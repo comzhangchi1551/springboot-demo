@@ -13,9 +13,9 @@ import java.util.Date;
  * 
  * @TableName seckill_user
  */
-@TableName(value ="seckill_user")
+@TableName(value ="s_user")
 @Data
-public class SeckillUser implements Serializable {
+public class SUser implements Serializable {
     /**
      * 
      */

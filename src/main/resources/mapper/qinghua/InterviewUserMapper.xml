@@ -23,7 +23,7 @@
     </sql>
 
 
-    <select id="selectUserVO" resultType="com.miya.entity.vo.InterviewUserVO">
+    <select id="selectUserVO" resultType="com.miya.entity.vo.interview.InterviewUserVO">
         select
             iu.id,
             iu.username,

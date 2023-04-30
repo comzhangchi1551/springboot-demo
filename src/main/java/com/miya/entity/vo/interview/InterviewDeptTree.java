@@ -1,4 +1,4 @@
-package com.miya.entity.vo;
+package com.miya.entity.vo.interview;
 
 import lombok.Data;
 

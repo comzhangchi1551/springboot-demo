@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miya.mapper.SSeckillOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.miya.entity.model.SSeckillOrder">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="sUserId" column="s_user_id" jdbcType="BIGINT"/>
+            <result property="sOrderId" column="s_order_id" jdbcType="BIGINT"/>
+            <result property="sSeckillGoodsId" column="s_seckill_goods_id" jdbcType="BIGINT"/>
+            <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,s_user_id,s_order_id,
+        s_seckill_goods_id,del_flag
+    </sql>
+</mapper>

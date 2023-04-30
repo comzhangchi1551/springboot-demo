@@ -30,7 +30,7 @@ import java.util.Date;
 @Component
 @Aspect
 @Slf4j
-public class TempAspect {
+public class LogPrintAspect {
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping)" +

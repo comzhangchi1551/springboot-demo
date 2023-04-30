@@ -3,7 +3,7 @@ package com.miya.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.entity.model.InterviewUser;
-import com.miya.entity.vo.InterviewUserVO;
+import com.miya.entity.vo.interview.InterviewUserVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

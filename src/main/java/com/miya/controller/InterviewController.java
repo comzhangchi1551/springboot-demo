@@ -2,9 +2,9 @@ package com.miya.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.common.BaseResult;
-import com.miya.entity.vo.InterviewDeptTree;
-import com.miya.entity.vo.InterviewUserRoleVO;
-import com.miya.entity.vo.InterviewUserVO;
+import com.miya.entity.vo.interview.InterviewDeptTree;
+import com.miya.entity.vo.interview.InterviewUserRoleVO;
+import com.miya.entity.vo.interview.InterviewUserVO;
 import com.miya.service.InterviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

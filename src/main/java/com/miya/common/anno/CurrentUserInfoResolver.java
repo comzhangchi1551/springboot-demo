@@ -1,7 +1,7 @@
 package com.miya.common.anno;
 
 import com.miya.entity.cost.SeckillLoginCost;
-import com.miya.entity.model.SeckillUser;
+import com.miya.entity.model.SUser;
 import com.miya.service.SeckillUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -33,7 +33,7 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(SeckillUser.class)
+        return parameter.getParameterType().isAssignableFrom(SUser.class)
                 && parameter.hasParameterAnnotation(CurrentUserInfo.class);
     }
 
@@ -52,7 +52,7 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
         String cookieToken = getCookieValue(request, SeckillLoginCost.LOGIN_COOKIE_NAME);
-        SeckillUser user = seckillUserService.selectSeckillUserFromRedis(cookieToken);
+        SUser user = seckillUserService.selectSeckillUserFromRedis(cookieToken);
         return user;
     }
 

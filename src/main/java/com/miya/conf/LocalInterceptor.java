@@ -1,4 +1,4 @@
-package com.miya.common;
+package com.miya.conf;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * Date: 2021/2/22 20:16
  */
 @Slf4j
-public class TempInterceptor implements HandlerInterceptor {
+public class LocalInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

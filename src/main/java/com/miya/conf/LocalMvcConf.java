@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -19,6 +20,17 @@ public class LocalMvcConf implements WebMvcConfigurer {
     @Autowired
     private CurrentUserInfoResolver currentUserInfoResolver;
 
+    /**
+     * 添加自定义拦截器
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LocalInterceptor())
+                .addPathPatterns("/**");
+//                .excludePathPatterns("/login");
+        WebMvcConfigurer.super.addInterceptors(registry);
+    }
 
     /**
      * 登录校验，并解析入参user且进行参数值注入；
