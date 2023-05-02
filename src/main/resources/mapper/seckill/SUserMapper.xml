@@ -22,4 +22,11 @@
         slat,head,register_date,
         last_login_date,login_count,del_flag
     </sql>
+    <insert id="insertBatch">
+        insert into s_user(id, nickname, phone_number, password, slat, head, register_date, last_login_date, login_count, del_flag) 
+        values 
+            <foreach collection="list" close=")" open="(" item="item" separator=",">
+                #{item.id}
+            </foreach>
+    </insert>
 </mapper>

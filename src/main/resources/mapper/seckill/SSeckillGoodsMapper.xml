@@ -19,4 +19,8 @@
         stock_count,start_time,end_time,
         del_flag
     </sql>
+
+    <update id="reduceStockCount">
+        update s_seckill_goods set stock_count = stock_count-1 where id = #{seckillGoodsId} and stock_count>0
+    </update>
 </mapper>

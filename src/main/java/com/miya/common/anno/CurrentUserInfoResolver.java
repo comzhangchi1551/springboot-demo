@@ -1,5 +1,6 @@
 package com.miya.common.anno;
 
+import com.miya.common.BaseException;
 import com.miya.entity.cost.SeckillLoginCost;
 import com.miya.entity.model.SUser;
 import com.miya.service.SeckillUserService;
@@ -53,11 +54,17 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
 
         String cookieToken = getCookieValue(request, SeckillLoginCost.LOGIN_COOKIE_NAME);
         SUser user = seckillUserService.selectSeckillUserFromRedis(cookieToken);
+        if (user == null) {
+            throw new BaseException("未登录");
+        }
         return user;
     }
 
     private String getCookieValue(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookies.length == 0) {
+            return null;
+        }
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(cookieName)) {
                 return cookie.getValue();

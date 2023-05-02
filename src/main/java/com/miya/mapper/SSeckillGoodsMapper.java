@@ -2,6 +2,7 @@ package com.miya.mapper;
 
 import com.miya.entity.model.SSeckillGoods;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SSeckillGoodsMapper extends BaseMapper<SSeckillGoods> {
 
+    boolean reduceStockCount(@Param("seckillGoodsId") Long seckillGoodsId);
 }
 
 

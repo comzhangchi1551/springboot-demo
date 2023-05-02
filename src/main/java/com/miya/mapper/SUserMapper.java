@@ -1,8 +1,11 @@
 package com.miya.mapper;
 
-import com.miya.entity.model.SUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.miya.entity.model.SUser;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
 * @author zhangchi
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Repository;
 */
 @Repository
 public interface SUserMapper extends BaseMapper<SUser> {
-
+    void insertBatch(@Param("list") List<SUser> list);
 }
 
 

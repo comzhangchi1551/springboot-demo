@@ -28,7 +28,7 @@ public class LocalFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("<<<<<<<<< doFilter <<<<<<<<<");
+//        log.info("<<<<<<<<< doFilter <<<<<<<<<");
         TracerEntry tracerEntry = TraceThreadLocal.get();
         if (tracerEntry == null) {
             TracerEntry acquire = TracerEntry.acquire();
@@ -42,7 +42,7 @@ public class LocalFilter implements Filter {
         } finally {
             TraceThreadLocal.remove();
         }
-        log.info(">>>>>>>> doFilter >>>>>>>>");
+//        log.info(">>>>>>>> doFilter >>>>>>>>");
     }
 
     @Override

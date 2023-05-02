@@ -3,6 +3,7 @@ package com.miya.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miya.common.BaseException;
 import com.miya.common.utils.MD5Util;
 import com.miya.entity.cost.SeckillLoginCost;
@@ -17,7 +18,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class SeckillUserServiceImpl implements SeckillUserService {
+public class SeckillUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements SeckillUserService {
 
     @Autowired
     private SUserMapper sUserMapper;
@@ -48,23 +48,11 @@ public class SeckillUserServiceImpl implements SeckillUserService {
 
     @Override
     @Transactional
-    public SOrder doSeckill(SUser sUser, Long seckillGoodsId) {
+    public SOrder doSeckill(SUser sUser, Long seckillGoodsId) throws InterruptedException {
         // 1. 判断商品是否有库存（包括商品和秒杀商品的库存）；
-        SSeckillGoods seckillGoods = sSeckillGoodsMapper.selectById(seckillGoodsId);
-        if (seckillGoods == null || seckillGoods.getDelFlag() == 1) {
-            throw new BaseException("秒杀商品不存在");
-        }
-        if (seckillGoods.getStockCount() != -1 && seckillGoods.getStockCount() <= 0) {
+        boolean reduceStockCount = sSeckillGoodsMapper.reduceStockCount(seckillGoodsId);
+        if (!reduceStockCount) {
             throw new BaseException("秒杀商品库存不足");
-        }
-
-        SGoods sGoods = sGoodsMapper.selectById(seckillGoods.getSGoodsId());
-        if (sGoods == null || sGoods.getDelFlag() == 1) {
-            throw new BaseException("商品不存在");
-        }
-
-        if (sGoods.getGoodsStock() != -1 && sGoods.getGoodsStock() <= 0) {
-            throw new BaseException("商品库存不足");
         }
 
         // 2. 判断该用户是否已经秒杀过此商品；
@@ -80,16 +68,10 @@ public class SeckillUserServiceImpl implements SeckillUserService {
             throw new BaseException("一人仅限秒杀一次");
         }
 
-        // 3. 执行秒杀
-
-        // 3.1 库存减1；
-        seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
-        sSeckillGoodsMapper.updateById(seckillGoods);
-        sGoods.setGoodsStock(sGoods.getGoodsStock() - 1);
-        sGoodsMapper.updateById(sGoods);
-
-
         // 3.2 生成订单数据；
+        SSeckillGoods seckillGoods = sSeckillGoodsMapper.selectById(seckillGoodsId);
+        SGoods sGoods = sGoodsMapper.selectById(seckillGoods.getSGoodsId());
+
         SOrder sOrder = new SOrder();
         sOrder.setSUserId(sUser.getId());
         sOrder.setSGoodsId(seckillGoodsId);
@@ -109,11 +91,13 @@ public class SeckillUserServiceImpl implements SeckillUserService {
         seckillOrder.setSOrderId(sOrder.getId());
         seckillOrder.setSSeckillGoodsId(seckillGoodsId);
         sSeckillOrderMapper.insert(seckillOrder);
+
+
         return null;
     }
 
     @Override
-    public void doLogin(String phone, String password, HttpServletRequest request, HttpServletResponse response) {
+    public String doLogin(String phone, String password, HttpServletRequest request, HttpServletResponse response) {
         String DBPass = MD5Util.inputPassTODBPass(password, MD5Util.SALT);
         SUser user = sUserMapper.selectOne(
                 new LambdaQueryWrapper<SUser>()
@@ -127,9 +111,11 @@ public class SeckillUserServiceImpl implements SeckillUserService {
         }
 
         String ticket = UUID.randomUUID().toString();
-        log.info("ticket: ["+ticket+"]");
+        log.info("ticket: [" + ticket + "]");
         redisTemplate.opsForValue().set(String.format(SeckillLoginCost.LOGIN_REDIS_KEY, ticket), user);
-        response.addCookie(new Cookie(SeckillLoginCost.LOGIN_COOKIE_NAME, ticket));
+//        response.addCookie(new Cookie(SeckillLoginCost.LOGIN_COOKIE_NAME, ticket));
+
+        return ticket;
     }
 
     @Override

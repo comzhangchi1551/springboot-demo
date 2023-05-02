@@ -19,6 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("seckill")
@@ -30,6 +35,7 @@ public class SeckillController {
 
     /**
      * 登录
+     *
      * @param phone
      * @param password
      * @param request
@@ -49,6 +55,7 @@ public class SeckillController {
 
     /**
      * 商品列表
+     *
      * @param sUser
      * @param pageNum
      * @param pageSize
@@ -57,7 +64,7 @@ public class SeckillController {
     @GetMapping("goodsList")
     public BaseResult goodsList(@CurrentUserInfo SUser sUser,
                                 @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                @RequestParam(required = false, defaultValue = "10") Integer pageSize){
+                                @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Page<SGoodsVO> page = seckillUserService.goodsList(sUser, pageNum, pageSize);
         return BaseResult.success(page);
     }
@@ -65,6 +72,7 @@ public class SeckillController {
 
     /**
      * 商品详情
+     *
      * @param sUser
      * @param goodsId
      * @return
@@ -76,14 +84,53 @@ public class SeckillController {
     }
 
     @RequestMapping("doSeckill")
-    public BaseResult doSeckill(@CurrentUserInfo SUser sUser, @NotNull Long seckillGoodsId){
+    public BaseResult doSeckill(@CurrentUserInfo SUser sUser, @NotNull Long seckillGoodsId) throws InterruptedException {
         SOrder sOrder = seckillUserService.doSeckill(sUser, seckillGoodsId);
         return BaseResult.success(sOrder);
     }
 
 
+    @RequestMapping("createUser")
+    public BaseResult createUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        File file = new File("./abc.txt");
+        if (file.exists()) {
+            file.delete();
+        }
+
+        long along = 13700000000L;
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+
+        List<SUser> allUser = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            List<SUser> list = new ArrayList<>();
+            for (int j = 0; j < 1000; j++) {
+                SUser sUser = new SUser();
+                sUser.setNickname("gaga"+along);
+                sUser.setPhoneNumber(String.valueOf(along++));
+                sUser.setPassword("0687f9701bca74827fcefcd7e743d179");
+                sUser.setSlat("1a2b3c4d");
+                sUser.setHead("");
+                list.add(sUser);
+            }
+            seckillUserService.saveBatch(list);
+            allUser.addAll(list);
+        }
 
 
+        raf.seek(0);
+        for (SUser sUser : allUser) {
+            String ticket = seckillUserService.doLogin(sUser.getPhoneNumber(), "123456", request, response);
+            raf.seek(raf.length());
+            String row = sUser.getPhoneNumber() + "," + ticket + "\r\n";
+            raf.write(row.getBytes());
+        }
+
+        raf.close();
+
+
+        return BaseResult.success();
+    }
 
 
 }
