@@ -11,13 +11,25 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
+
+
+    /**
+     * beanFactory在生成BeanDifinitionMap后，会调用此方法；（只调一次）
+     * @param beanFactory the bean factory used by the application context
+     * @throws BeansException
+     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         System.out.println("----------------postProcessBeanFactory----------------");
     }
 
+
+    /**
+     * 当前Bean完成后，调用
+     * @throws Exception
+     */
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("-----------------afterPropertiesSet-----------------");
+        System.out.println("===LocalBeanFactoryPostProcessor===afterPropertiesSet===");
     }
 }

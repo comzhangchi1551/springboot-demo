@@ -1,14 +1,20 @@
 package com.miya.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.common.BaseResult;
 import com.miya.entity.dto.TempUserInsertDTO;
 import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.model.TempUser;
+import com.miya.mq.rabbit.RabbitMQSender;
 import com.miya.service.TempUserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * Auth: 张翅
@@ -18,7 +24,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("test")
 @Validated
-public class TestController {
+@Slf4j
+public class TestController implements InitializingBean {
 
     @Autowired
     private TempUserService tempUserService;
@@ -51,6 +58,20 @@ public class TestController {
     }
 
 
+    @Autowired
+    private RabbitMQSender rabbitMQSender;
+
+    /**
+     * 测试发送rabbitmq消息；
+     */
+    @RequestMapping("mq")
+    public void mq(@NotBlank String msg){
+        rabbitMQSender.send(JSON.toJSONString(msg));
+    }
 
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        log.info("===TestController===afterPropertiesSet===");
+    }
 }

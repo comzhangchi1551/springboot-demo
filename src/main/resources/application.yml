@@ -56,6 +56,29 @@ spring:
         max-wait: 10000ms
         max-idle: 200
         min-idle: 5
+  rabbitmq:
+    host: 192.168.31.208
+    username: admin
+    password: admin
+    virtual-host: /
+    port: 5672
+    listener:
+      simple:
+#        消费者最小数量
+        concurrency: 10
+#        消费者最大数量
+        max-concurrency: 10
+#        限制消费者每次只能处理1条消息；
+        prefetch: 1
+#        启动时，是否默认启动容器
+        auto-startup: true
+#        被拒绝时，重新进入队列
+        default-requeue-rejected: true
+    template:
+      retry:
+#        发布重试，默认false
+        enabled: true
+        initial-interval: 1000ms
 
 # 日志debug显示
 logging:
@@ -68,3 +91,4 @@ mybatis-plus:
     lazy-loading-enabled: true
     map-underscore-to-camel-case: true
   mapper-locations: classpath*:/mapper/**/*.xml
+
