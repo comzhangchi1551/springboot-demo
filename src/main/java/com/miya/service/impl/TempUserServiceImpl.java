@@ -17,6 +17,7 @@ import com.miya.service.TempUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -181,6 +182,13 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
     public Page<TempUser> selectList(Integer pageNum, Integer pageSize, String keyword) {
         Page<TempUser> tempUserMapperPage = tempUserMapper.selectPageCustom(PageDTO.of(pageNum, pageSize), keyword);
         return tempUserMapperPage;
+    }
+
+    @Override
+    @Cacheable(value = "tempUser", key = "#root.methodName")
+    public TempUser getDetailById(Long id) {
+        TempUser tempUser = tempUserMapper.selectById(id);
+        return tempUser;
     }
 
 

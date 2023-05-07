@@ -23,6 +23,13 @@ spring:
         max-size: 6
         queue-capacity: 100
       thread-name-prefix: temp-thread-
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+  redis:
+    host: 192.168.31.208
+    password: 12345678
 
 # 日志debug显示
 logging:

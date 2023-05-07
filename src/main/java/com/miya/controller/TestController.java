@@ -38,6 +38,13 @@ public class TestController {
     }
 
 
+    @GetMapping("detail")
+    public BaseResult detail(Long tempUserId){
+        TempUser byId = tempUserService.getDetailById(tempUserId);
+        return BaseResult.success(byId);
+    }
+
+
     @PostMapping("insert")
     public BaseResult insert(@RequestBody @Validated TempUserInsertDTO insertDTO){
         tempUserService.insert(insertDTO);
