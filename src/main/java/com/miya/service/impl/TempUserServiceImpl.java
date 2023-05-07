@@ -185,7 +185,7 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
     }
 
     @Override
-    @Cacheable(value = "tempUser", key = "#root.methodName")
+    @Cacheable(value = "tempUser")
     public TempUser getDetailById(Long id) {
         TempUser tempUser = tempUserMapper.selectById(id);
         return tempUser;
