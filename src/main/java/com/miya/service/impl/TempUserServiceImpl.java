@@ -17,6 +17,7 @@ import com.miya.service.TempUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -146,7 +147,13 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
 
     private static final ReentrantLock TEMP_USER_UPDATE_LOCK = new ReentrantLock();
 
+
+    /**
+     * CacheEvict：更新数据后，将缓存中的key进行删除；
+     * @param updateDTO
+     */
     @Override
+    @CacheEvict(value = "user:tempUser",key = "#root.args[0].id")
     public void update(TempUserUpdateDTO updateDTO) {
         TempUser tempUser = tempUserMapper.selectById(updateDTO.getId());
         if (tempUser == null) {
@@ -184,8 +191,15 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
         return tempUserMapperPage;
     }
 
+
+    /**
+     * 查询详情；
+     * Cacheable：将方法的返回数据进行缓存，类别为tempUser，且key为 "tempUser::1"；
+     * @param id
+     * @return
+     */
     @Override
-    @Cacheable(value = "tempUser")
+    @Cacheable(value = "user:tempUser", key = "#root.args[0]", sync = false)
     public TempUser getDetailById(Long id) {
         TempUser tempUser = tempUserMapper.selectById(id);
         return tempUser;
