@@ -18,7 +18,12 @@
   <select id="selectPageCustom" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from temp_user where username like CONCAT('%', #{username}, '%')
+    from temp_user
+    <where>
+        <if test="username!= null and username != ''">
+          username like CONCAT('%', #{username}, '%')
+        </if>
+    </where>
   </select>
 
 

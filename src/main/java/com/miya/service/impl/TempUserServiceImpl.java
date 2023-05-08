@@ -16,6 +16,7 @@ import com.miya.entity.model.TempUser;
 import com.miya.service.TempUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -179,7 +180,12 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
 
     @Override
     public Page<TempUser> selectList(Integer pageNum, Integer pageSize, String keyword) {
-        Page<TempUser> tempUserMapperPage = tempUserMapper.selectPageCustom(PageDTO.of(pageNum, pageSize), keyword);
+        Page<TempUser> tempUserMapperPage = tempUserMapper.selectPage(
+                PageDTO.of(pageNum, pageSize),
+                new LambdaQueryWrapper<TempUser>()
+                        .like(StringUtils.isNotBlank(keyword), TempUser::getUsername, keyword)
+        );
+//        Page<TempUser> tempUserMapperPage = tempUserMapper.selectPageCustom(PageDTO.of(pageNum, pageSize), keyword);
         return tempUserMapperPage;
     }
 

@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: tencent
-
   application:
     name: zcc-temp
 
@@ -23,6 +20,12 @@ spring:
         max-size: 6
         queue-capacity: 100
       thread-name-prefix: temp-thread-
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://10.18.22.73:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: K2pass!!
 
 # 日志debug显示
 logging:

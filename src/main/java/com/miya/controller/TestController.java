@@ -25,7 +25,7 @@ public class TestController {
 
     @GetMapping("t1")
     public String t1(String name){
-        System.out.println("name = " + name);
+        System.out.println("name111222 = " + name);
         return name;
     }
 
