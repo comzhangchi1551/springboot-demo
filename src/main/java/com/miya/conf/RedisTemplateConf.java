@@ -1,51 +1,30 @@
-//package com.miya.conf;
-//
-//import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.data.redis.connection.RedisConnectionFactory;
-//import org.springframework.data.redis.core.RedisTemplate;
-//import org.springframework.data.redis.core.StringRedisTemplate;
-//import org.springframework.data.redis.serializer.GenericToStringSerializer;
-//
-//@Configuration
-//public class RedisTemplateConf {
-//
-//    @Bean
-//    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//        RedisTemplate redisTemplate = new RedisTemplate<>();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory);
-//        // 使用 GenericFastJsonRedisSerializer 替换默认序列化
-//        GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-//        // 设置key和value的序列化规则
-//        redisTemplate.setKeySerializer(new GenericToStringSerializer<>(Object.class));
-//        redisTemplate.setValueSerializer(genericFastJsonRedisSerializer);
-//        // 设置hashKey和hashValue的序列化规则
-//        redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Object.class));
-//        redisTemplate.setHashValueSerializer(genericFastJsonRedisSerializer);
-//        // 设置支持事物
-//        redisTemplate.setEnableTransactionSupport(true);
-//        redisTemplate.afterPropertiesSet();
-//        System.out.println(redisTemplate);
-//        return redisTemplate;
-//    }
-//
-//    @Bean
-//    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory){
-//        StringRedisTemplate redisTemplate = new StringRedisTemplate();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory);
-//        // 使用 GenericFastJsonRedisSerializer 替换默认序列化
-//        GenericFastJsonRedisSerializer genericFastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-//        // 设置key和value的序列化规则
-//        redisTemplate.setKeySerializer(new GenericToStringSerializer<>(Object.class));
-//        redisTemplate.setValueSerializer(genericFastJsonRedisSerializer);
-//        // 设置hashKey和hashValue的序列化规则
-//        redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Object.class));
-//        redisTemplate.setHashValueSerializer(genericFastJsonRedisSerializer);
-//        // 设置支持事物
-//        redisTemplate.setEnableTransactionSupport(true);
-//        redisTemplate.afterPropertiesSet();
-//        System.out.println(redisTemplate);
-//        return redisTemplate;
-//    }
-//}
+package com.miya.conf;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+@Configuration
+public class RedisTemplateConf {
+
+    @Autowired
+    public RedisTemplateConf(RedisTemplate redisTemplate) {
+
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        GenericJackson2JsonRedisSerializer valueSerializer = new GenericJackson2JsonRedisSerializer();
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setValueSerializer(valueSerializer);
+
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashValueSerializer(valueSerializer);
+        redisTemplate.afterPropertiesSet();
+    }
+}
