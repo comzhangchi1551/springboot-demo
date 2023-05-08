@@ -7,3 +7,6 @@ spring:
 #    url: jdbc:mysql://43.142.243.245:3306/springboot-demo?serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true
     username: root
     password: 12345678
+  redis:
+    host: 192.168.31.208
+    password: 12345678

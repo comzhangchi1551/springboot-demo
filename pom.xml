@@ -177,6 +177,11 @@
             <artifactId>spring-test</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
 
     </dependencies>
 
@@ -192,6 +197,7 @@
 
 
     <profiles>
+
         <profile>
             <id>minth</id>
             <activation>
@@ -203,9 +209,10 @@
         </profile>
 
         <profile>
-            <id>tencent</id>
+            <id>home</id>
+
             <properties>
-                <profiles.active>tencent</profiles.active>
+                <profiles.active>home</profiles.active>
             </properties>
         </profile>
     </profiles>
