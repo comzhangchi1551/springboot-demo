@@ -1,4 +1,4 @@
-package com.miya.rocketmq;
+package com.miya.rocketmq.broadcast;
 
 
 import org.apache.rocketmq.client.producer.DefaultMQProducer;

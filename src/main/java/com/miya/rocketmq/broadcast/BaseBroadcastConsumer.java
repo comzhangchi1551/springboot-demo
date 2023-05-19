@@ -1,4 +1,4 @@
-package com.miya.rocketmq;
+package com.miya.rocketmq.broadcast;
 
 import lombok.SneakyThrows;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -10,7 +10,7 @@ import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.util.List;
 
-public class BaseBroadcastConsumer2 {
+public class BaseBroadcastConsumer {
     @SneakyThrows
     public static void main(String[] args) {
         // 创建消费者对象

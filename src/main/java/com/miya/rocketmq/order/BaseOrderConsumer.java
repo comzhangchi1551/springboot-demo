@@ -1,4 +1,4 @@
-package com.miya.rocketmq;
+package com.miya.rocketmq.order;
 
 import lombok.SneakyThrows;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
