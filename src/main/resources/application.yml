@@ -36,3 +36,5 @@ logging:
 mybatis-plus:
   configuration:
     lazy-loading-enabled: true
+server:
+  port: 8082

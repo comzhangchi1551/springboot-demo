@@ -5,8 +5,11 @@ import com.miya.common.BaseResult;
 import com.miya.entity.dto.TempUserInsertDTO;
 import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.model.TempUser;
+import com.miya.event.MyEvent;
 import com.miya.service.TempUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("test")
 @Validated
+@Slf4j
 public class TestController {
 
     @Autowired
     private TempUserService tempUserService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @GetMapping("t1")
     public String t1(String name){
@@ -51,6 +58,12 @@ public class TestController {
     }
 
 
+    @GetMapping("event")
+    public BaseResult eventTest(){
+        applicationContext.publishEvent(new MyEvent("zzz", 14));
+        log.info("MyEvent send success!");
+        return BaseResult.success();
+    }
 
 
 }
