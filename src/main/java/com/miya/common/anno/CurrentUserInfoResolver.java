@@ -10,20 +10,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.annotation.PostConstruct;
-
 /**
  * Auth: 张
  * Desc: 将使用了@CurrentUserInfo注解标注的controller层的TempUser参数，填充属性；
+ *          该类定义好后，需要：1.被放到容器中；2. 被注册到 mvc 的 ArgumentResolvers 中； 才能生效。
  * Date: 2021/3/1 17:36
  */
 @Component
 public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
-
-    @PostConstruct
-    public void init(){
-        System.out.println("CurrentUserInfoResolver init success");
-    }
 
     @Autowired
     private TempUserMapper tempUserMapper;
@@ -39,8 +33,9 @@ public class CurrentUserInfoResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(TempUser.class)
+        boolean result = parameter.getParameterType().isAssignableFrom(TempUser.class)
                 && parameter.hasParameterAnnotation(CurrentUserInfo.class);
+        return result;
     }
 
 
