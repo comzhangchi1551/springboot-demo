@@ -2,6 +2,7 @@ package com.miya.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.miya.common.BaseResult;
+import com.miya.common.anno.CurrentUserInfo;
 import com.miya.entity.dto.TempUserInsertDTO;
 import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.model.TempUser;
@@ -29,6 +30,12 @@ public class TestController {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @GetMapping("testCurrentUserInfo")
+    public String testCurrentUserInfo(String str, @CurrentUserInfo TempUser tempUser){
+        return tempUser.toString();
+    }
+
 
     @GetMapping("t1")
     public String t1(String name){
