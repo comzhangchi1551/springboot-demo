@@ -1,4 +1,4 @@
-package com.miya.common;
+package com.miya.common.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
