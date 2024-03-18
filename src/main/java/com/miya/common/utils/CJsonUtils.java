@@ -12,7 +12,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -65,20 +67,32 @@ public class CJsonUtils {
      * @param args
      */
     public static void main(String[] args) {
-        String json = CJsonUtils.toJson(new TempUser(1l, "ee", null));
-        System.out.println("json = " + json);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("abc", "abc");
+        map.put(null, "bbb");
+        map.put("ddd", null);
+        map.put("fff", "fff");
+
+        String mapToJson = CJsonUtils.toJson(map);
+        System.out.println("mapToJson = " + mapToJson);
+
+
+        String objectToJson = CJsonUtils.toJson(new TempUser(1l, "ee", null));
+        System.out.println("objectToJson = " + objectToJson);
 
 
 
 
         String tempUserJson = "{\n" +
-                "        \"id\": 1,\n" +
+                "        \"id\": null,\n" +
                 "        \"username\": \"zhangchi\",\n" +
+                "        \"username22\": \"zhangchi22\",\n" +
                 "        \"age\": 12\n" +
                 "    }";
 
-        TempUser fromJsonToTempUser = CJsonUtils.fromJson(tempUserJson, TempUser.class);
-        System.out.println("fromJsonToTempUser = " + fromJsonToTempUser);
+        TempUser jsonToObject = CJsonUtils.fromJson(tempUserJson, TempUser.class);
+        System.out.println("jsonToObject = " + jsonToObject);
 
 
         String tempUserListJson = "[\n" +
@@ -99,8 +113,40 @@ public class CJsonUtils {
                 "    }\n" +
                 "]";
 
-        List<TempUser> tempUserList = CJsonUtils.fromJson(tempUserListJson, new TypeReference<List<TempUser>>() {});
-        System.out.println("tempUserList = " + tempUserList);
+        List<TempUser> jsonToList = CJsonUtils.fromJson(tempUserListJson, new TypeReference<List<TempUser>>() {});
+        System.out.println("jsonToList = " + jsonToList);
+
+
+        String mapTest = "{\n" +
+                "    \"key1\":[\n" +
+                "        {\n" +
+                "            \"id\": 1,\n" +
+                "            \"userna2\": \"zhangchi\",\n" +
+                "            \"age\": null\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"key2\":[\n" +
+                "        {\n" +
+                "            \"id\": 2,\n" +
+                "            \"id2\": 2,\n" +
+                "            \"username\": \"zhangchi\",\n" +
+                "            \"age\": 12\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": null,\n" +
+                "            \"username\": \"zhangchi\",\n" +
+                "            \"username2\": \"zhangchi\",\n" +
+                "            \"age\": 31\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+
+        Map<String, List<TempUser>> testJsonToMap = CJsonUtils.fromJson(mapTest, new TypeReference<Map<String, List<TempUser>>>() {
+        });
+        System.out.println("testJsonToMap = " + testJsonToMap);
+
+        String testMapToJson = CJsonUtils.toJson(testJsonToMap);
+        System.out.println("testMapToJson = " + testMapToJson);
     }
 
 
