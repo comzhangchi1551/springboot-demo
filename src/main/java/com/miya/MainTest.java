@@ -1,29 +1,38 @@
 package com.miya;
 
-import com.google.common.collect.Lists;
-import com.miya.entity.model.TempUser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.miya.common.utils.CJsonUtils;
+import lombok.Data;
+import lombok.SneakyThrows;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainTest {
 
+    @SneakyThrows
     public static void main(String[] args) {
-
+        testToJson();
     }
 
 
-    public static TempUser getTempUser() {
-        return new TempUser(1l, "eee", 21);
+    private static void testToJson() throws JsonProcessingException {
+        Map<String, String> map = new HashMap<>();
+        map.put("abc", "abc");
+        map.put(null, "bbb");
+        map.put("ddd", null);
+        map.put("fff", "fff");
+
+        String json = CJsonUtils.toJson(map);
+        System.out.println("json = " + json);
     }
 
 
-    public static List<TempUser> getTempUserList() {
-        return Lists.newArrayList(
-                new TempUser(1l, "eee", 21),
-                new TempUser(2l, "dd", 44),
-                new TempUser(3l, "aaa", 13),
-                new TempUser(4l, "fff", 13)
-        );
+
+    @Data
+    public static class CustomPerson {
+        private String name;
+        private int age;
     }
 
 }

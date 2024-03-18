@@ -1,24 +1,33 @@
 package com.miya.common.utils;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.miya.entity.model.TempUser;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.List;
 
 
 /**
  * 基于 jackson 自定义的JsonUtils；
  */
-public class CustomJsonUtils {
+@Slf4j
+public class CJsonUtils {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
         // 该特性决定了当遇到未知属性（没有映射到属性，没有任何setter或者任何可以处理它的handler），是否应该抛出一个JsonMappingException异常。
-        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        OBJECT_MAPPER.getSerializerProvider().setNullKeySerializer(new CustomNullKeySerializer());
     }
 
 
@@ -26,8 +35,6 @@ public class CustomJsonUtils {
     public static String toJson(Object object) {
         return OBJECT_MAPPER.writeValueAsString(object);
     }
-
-
 
 
     /**
@@ -58,7 +65,7 @@ public class CustomJsonUtils {
      * @param args
      */
     public static void main(String[] args) {
-        String json = CustomJsonUtils.toJson(new TempUser(1l, "ee", 13));
+        String json = CJsonUtils.toJson(new TempUser(1l, "ee", null));
         System.out.println("json = " + json);
 
 
@@ -70,7 +77,7 @@ public class CustomJsonUtils {
                 "        \"age\": 12\n" +
                 "    }";
 
-        TempUser fromJsonToTempUser = CustomJsonUtils.fromJson(tempUserJson, TempUser.class);
+        TempUser fromJsonToTempUser = CJsonUtils.fromJson(tempUserJson, TempUser.class);
         System.out.println("fromJsonToTempUser = " + fromJsonToTempUser);
 
 
@@ -78,7 +85,7 @@ public class CustomJsonUtils {
                 "    {\n" +
                 "        \"id\": 1,\n" +
                 "        \"userna2\": \"zhangchi\",\n" +
-                "        \"age\": 12\n" +
+                "        \"age\": null\n" +
                 "    },\n" +
                 "    {\n" +
                 "        \"id\": 2,\n" +
@@ -88,15 +95,33 @@ public class CustomJsonUtils {
                 "    {\n" +
                 "        \"id\": 3,\n" +
                 "        \"username\": \"zhaoliu\",\n" +
-                "        \"age\": 14\n" +
+                "        \"age3Ω\": 14\n" +
                 "    }\n" +
                 "]";
 
-        List<TempUser> tempUserList = CustomJsonUtils.fromJson(tempUserListJson, new TypeReference<List<TempUser>>() {
-        });
+        List<TempUser> tempUserList = CJsonUtils.fromJson(tempUserListJson, new TypeReference<List<TempUser>>() {});
         System.out.println("tempUserList = " + tempUserList);
     }
 
+
+    /**
+     * 自定义key为null的时候，怎么展示key；
+     */
+    static class CustomNullKeySerializer extends StdSerializer<Object> {
+        public CustomNullKeySerializer() {
+            this(null);
+        }
+
+        public CustomNullKeySerializer(Class<Object> t) {
+            super(t);
+        }
+
+        @Override
+        public void serialize(Object nullKey, JsonGenerator jsonGenerator, SerializerProvider unused)
+                throws IOException, JsonProcessingException {
+            jsonGenerator.writeFieldName("null");
+        }
+    }
 
 }
 
