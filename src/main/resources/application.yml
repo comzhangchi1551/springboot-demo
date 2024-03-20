@@ -30,11 +30,20 @@ spring:
 # 日志debug显示
 logging:
   level:
-    com:
-      miya:
-        dao: debug
+    com.miya.dao: debug
 mybatis-plus:
   configuration:
     lazy-loading-enabled: true
 server:
   port: 1111
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus
+          - health
+  metrics:
+    tags:
+      application: ${spring.application.name}
