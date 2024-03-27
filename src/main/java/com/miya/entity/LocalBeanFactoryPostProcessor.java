@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +20,7 @@ import javax.annotation.PostConstruct;
 public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
 
     /**
-     * 由于实现了 BeanFactoryPostProcessor，此方法会生效
+     * 由于实现了 BeanFactoryPostProcessor，此方法不会生效
      */
     @Value("${server.port}")
     private String serverPort;
@@ -37,6 +38,6 @@ public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, 
 
     @PostConstruct
     public void init(){
-        log.info("由于实现了 BeanFactoryPostProcessor，此方法会生效");
+        log.info("由于实现了 BeanFactoryPostProcessor，此方法不会生效");
     }
 }

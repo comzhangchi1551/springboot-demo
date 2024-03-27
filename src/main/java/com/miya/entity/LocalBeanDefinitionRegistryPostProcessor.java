@@ -8,6 +8,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
@@ -21,7 +22,7 @@ import javax.annotation.PostConstruct;
 public class LocalBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor, InitializingBean {
 
     /**
-     * 由于实现了 BeanFactoryPostProcessor，此方法会生效
+     * 由于实现了 BeanFactoryPostProcessor，此方法不会生效
      */
     @Value("${server.port}")
     private String serverPort;
@@ -45,7 +46,7 @@ public class LocalBeanDefinitionRegistryPostProcessor implements BeanDefinitionR
     @PostConstruct
     public void init(){
         log.info("=== serverPort ===" + serverPort);
-        log.info("由于实现了BeanDefinitionRegistryPostProcessor，此方法会生效");
+        log.info("由于实现了BeanDefinitionRegistryPostProcessor，此方法不会生效");
     }
 
 }
