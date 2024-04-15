@@ -1,38 +1,37 @@
 package com.miya;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.miya.common.utils.CJsonUtils;
+import com.miya.entity.model.TempUser;
 import lombok.Data;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
+import redis.clients.jedis.Jedis;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MainTest {
 
     @SneakyThrows
     public static void main(String[] args) {
-        testToJson();
+        boolean b = Stream.of("", "").filter(StringUtils::isNotBlank).anyMatch(code -> "".equalsIgnoreCase(code));
+        System.out.println(b);
     }
 
 
-    private static void testToJson() throws JsonProcessingException {
-        Map<String, String> map = new HashMap<>();
-        map.put("abc", "abc");
-        map.put(null, "bbb");
-        map.put("ddd", null);
-        map.put("fff", "fff");
+    public static void t1(String memberKey) {
 
-        String json = CJsonUtils.toJson(map);
-        System.out.println("json = " + json);
+        // 连接到Redis服务器，这里假设Redis运行在本地机器上，端口为6379
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        String redisKey = "trn:geo:cache:zset:searchByKeyword";
+
+        Double zscore = jedis.zscore(redisKey, memberKey);
+        if (zscore == null) {
+            jedis.zadd(redisKey, 1l, memberKey);
+        } else {
+            jedis.zincrby(redisKey,  1, memberKey);
+            jedis.zremrangeByRank(redisKey, 10, -1);
+        }
     }
-
-
-
-    @Data
-    public static class CustomPerson {
-        private String name;
-        private int age;
-    }
-
 }
