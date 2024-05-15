@@ -1,20 +1,19 @@
 package com.miya.common.utils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.miya.entity.model.TempUser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -28,6 +27,10 @@ public class CJsonUtils {
     static {
         // 该特性决定了当遇到未知属性（没有映射到属性，没有任何setter或者任何可以处理它的handler），是否应该抛出一个JsonMappingException异常。
         OBJECT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        OBJECT_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true);
+        OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_NUMERIC_LEADING_ZEROS, true);
+        OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
 
         OBJECT_MAPPER.getSerializerProvider().setNullKeySerializer(new CustomNullKeySerializer());
     }
@@ -36,6 +39,12 @@ public class CJsonUtils {
     @SneakyThrows
     public static String toJson(Object object) {
         return OBJECT_MAPPER.writeValueAsString(object);
+    }
+
+    @SneakyThrows
+    public static ObjectNode parseJson(String json) {
+        ObjectNode jsonNodes = OBJECT_MAPPER.readValue(json, ObjectNode.class);
+        return jsonNodes;
     }
 
 
@@ -59,94 +68,6 @@ public class CJsonUtils {
     @SneakyThrows
     public static <T> T fromJson(String jsonString, TypeReference<T> valueTypeRef) {
         return OBJECT_MAPPER.readValue(jsonString, valueTypeRef);
-    }
-
-
-    /**
-     * 使用示例如下
-     * @param args
-     */
-    public static void main(String[] args) {
-
-        Map<String, String> map = new HashMap<>();
-        map.put("abc", "abc");
-        map.put(null, "bbb");
-        map.put("ddd", null);
-        map.put("fff", "fff");
-
-        String mapToJson = CJsonUtils.toJson(map);
-        System.out.println("mapToJson = " + mapToJson);
-
-
-        String objectToJson = CJsonUtils.toJson(new TempUser(1l, "ee", null));
-        System.out.println("objectToJson = " + objectToJson);
-
-
-
-
-        String tempUserJson = "{\n" +
-                "        \"id\": null,\n" +
-                "        \"username\": \"zhangchi\",\n" +
-                "        \"username22\": \"zhangchi22\",\n" +
-                "        \"age\": 12\n" +
-                "    }";
-
-        TempUser jsonToObject = CJsonUtils.fromJson(tempUserJson, TempUser.class);
-        System.out.println("jsonToObject = " + jsonToObject);
-
-
-        String tempUserListJson = "[\n" +
-                "    {\n" +
-                "        \"id\": 1,\n" +
-                "        \"userna2\": \"zhangchi\",\n" +
-                "        \"age\": null\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"id\": 2,\n" +
-                "        \"username\": \"wangwu\",\n" +
-                "        \"age\": 13\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"id\": 3,\n" +
-                "        \"username\": \"zhaoliu\",\n" +
-                "        \"age3Ω\": 14\n" +
-                "    }\n" +
-                "]";
-
-        List<TempUser> jsonToList = CJsonUtils.fromJson(tempUserListJson, new TypeReference<List<TempUser>>() {});
-        System.out.println("jsonToList = " + jsonToList);
-
-
-        String mapTest = "{\n" +
-                "    \"key1\":[\n" +
-                "        {\n" +
-                "            \"id\": 1,\n" +
-                "            \"userna2\": \"zhangchi\",\n" +
-                "            \"age\": null\n" +
-                "        }\n" +
-                "    ],\n" +
-                "    \"key2\":[\n" +
-                "        {\n" +
-                "            \"id\": 2,\n" +
-                "            \"id2\": 2,\n" +
-                "            \"username\": \"zhangchi\",\n" +
-                "            \"age\": 12\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"id\": null,\n" +
-                "            \"username\": \"zhangchi\",\n" +
-                "            \"username2\": \"zhangchi\",\n" +
-                "            \"age\": 31\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-
-        Map<String, List<TempUser>> testJsonToMap = CJsonUtils.fromJson(mapTest, new TypeReference<Map<String, List<TempUser>>>() {
-        });
-        System.out.println("testJsonToMap = " + testJsonToMap);
-
-        String testMapToJson = CJsonUtils.toJson(testJsonToMap);
-        System.out.println("testMapToJson = " + testMapToJson);
     }
 
 
