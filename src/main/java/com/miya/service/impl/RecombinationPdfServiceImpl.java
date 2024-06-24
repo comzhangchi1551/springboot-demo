@@ -35,7 +35,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
     private BindingLayerRelationMapper bindingLayerRelationMapper;
 
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadPoolTaskExecutor localAsyncExecutor;
 
 
 
@@ -45,7 +45,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
         Map<Long, GroupLayerRelation> layerIdGroupLayerRelationMap = new HashMap<>();
         Long psdProjectId = insertData(recombinationPdfDTO, layerIdGroupLayerRelationMap);
 
-        threadPoolTaskExecutor.execute(() -> {
+        localAsyncExecutor.execute(() -> {
             Map<Long, List<GroupLayerRelation>> buildBindingMap =
                     buildBindingMap(recombinationPdfDTO.getBindingsDTOList(), layerIdGroupLayerRelationMap);
 

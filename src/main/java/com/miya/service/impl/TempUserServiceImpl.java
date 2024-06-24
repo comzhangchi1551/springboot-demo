@@ -46,7 +46,7 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
 
 
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadPoolTaskExecutor localAsyncExecutor;
 
 
     public Page<TempUser> selectByPage(int pageNum, int pageSize) {
@@ -80,7 +80,7 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
         atomicBoolean.set(true);
 
         // 一个线程读；
-        threadPoolTaskExecutor.execute(()->{
+        localAsyncExecutor.execute(() -> {
             for (int i = 1; i <= totalPageNum; i++) {
                 System.out.println(i + "查询数据   " + Thread.currentThread().getName());
                 // 获取数据

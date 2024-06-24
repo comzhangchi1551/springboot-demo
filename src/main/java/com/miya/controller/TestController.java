@@ -50,8 +50,15 @@ public class TestController {
     private ApplicationContext applicationContext;
 
     private Counter visitCounter;
+
+    /**
+     * 创建一个被打点的本地缓存；
+     */
     private final LoadingCache<String, String> REFRESH_CACHE;
 
+    /**
+     * 创建一个被打点的线程池；
+     */
     private final ScheduledExecutorService REFRESH_EXECUTOR;
 
 
