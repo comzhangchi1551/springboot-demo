@@ -106,6 +106,16 @@ public class TestController {
     }
 
 
+
+    @GetMapping("testAop")
+    public BaseResult testAop(){
+        tempUserService.testAop();
+        return BaseResult.success();
+    }
+
+
+
+
     @GetMapping("testCurrentUserInfo")
     public String testCurrentUserInfo(String str, @CurrentUserInfo TempUser tempUser){
         return tempUser.toString();
@@ -147,18 +157,6 @@ public class TestController {
     }
 
 
-    @PostMapping("insert")
-    public BaseResult insert(@RequestBody @Validated TempUserInsertDTO insertDTO){
-        tempUserService.insert(insertDTO);
-        return BaseResult.success();
-    }
-
-    @PostMapping("update")
-    public BaseResult update(@RequestBody @Validated TempUserUpdateDTO updateDTO) {
-        tempUserService.update(updateDTO);
-        return BaseResult.success();
-    }
-
 
     @GetMapping("event")
     public BaseResult eventTest(){
@@ -166,6 +164,8 @@ public class TestController {
         log.info("MyEvent send success!");
         return BaseResult.success();
     }
+
+
 
 
 }

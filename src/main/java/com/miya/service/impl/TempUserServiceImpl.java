@@ -189,6 +189,11 @@ public class TempUserServiceImpl extends ServiceImpl<TempUserMapper, TempUser> i
         return tempUserMapperPage;
     }
 
+    @Override
+    public void testAop() {
+        System.out.println("testAop");
+    }
+
 
 //    /**
 //     * 自定义标题，且多个sheet导出demo；-----------------单线程读写
