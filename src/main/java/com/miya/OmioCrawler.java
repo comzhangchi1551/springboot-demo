@@ -153,7 +153,7 @@ public class OmioCrawler {
     public static void t1(String memberKey) {
 
         // 连接到Redis服务器，这里假设Redis运行在本地机器上，端口为6379
-        Jedis jedis = new Jedis("localhost", 6379);
+        Jedis jedis = new Jedis("192.168.202.103", 6379);
 
         String redisKey = "trn:geo:cache:zset:searchByKeyword";
 

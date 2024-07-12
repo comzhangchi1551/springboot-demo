@@ -26,7 +26,9 @@ spring:
     url: jdbc:mysql://192.168.202.103:3306/sb_demo?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
     password: 12345678
-
+  redis:
+    host: 192.168.202.103
+    port: 6379
 # 日志debug显示
 logging:
   level:
