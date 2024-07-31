@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-import redis.clients.jedis.Jedis;
 
 import java.io.File;
 import java.io.IOException;
@@ -148,21 +147,4 @@ public class OmioCrawler {
         }
     }
 
-
-
-    public static void t1(String memberKey) {
-
-        // 连接到Redis服务器，这里假设Redis运行在本地机器上，端口为6379
-        Jedis jedis = new Jedis("192.168.202.103", 6379);
-
-        String redisKey = "trn:geo:cache:zset:searchByKeyword";
-
-        Double zscore = jedis.zscore(redisKey, memberKey);
-        if (zscore == null) {
-            jedis.zadd(redisKey, 1l, memberKey);
-        } else {
-            jedis.zincrby(redisKey,  1, memberKey);
-            jedis.zremrangeByRank(redisKey, 10, -1);
-        }
-    }
 }
