@@ -29,6 +29,16 @@ spring:
   redis:
     host: 192.168.202.103
     port: 6379
+  kafka:
+    bootstrap-servers: 192.168.202.103:19092, 192.168.202.103:29092, 192.168.202.103:39092
+    producer:
+      acks: all
+    consumer:
+      group-id: default-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+    listener:
+      ack-mode: manual_immediate
 # 日志debug显示
 logging:
   level:
