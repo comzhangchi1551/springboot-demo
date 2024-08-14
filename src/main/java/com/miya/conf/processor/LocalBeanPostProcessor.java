@@ -1,4 +1,4 @@
-package com.miya.entity;
+package com.miya.conf.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -11,7 +11,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.util.Optional;
 
 @Configuration
 @Slf4j

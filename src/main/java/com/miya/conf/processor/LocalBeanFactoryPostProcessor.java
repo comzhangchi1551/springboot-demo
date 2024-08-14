@@ -1,4 +1,4 @@
-package com.miya.entity;
+package com.miya.conf.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import javax.annotation.PostConstruct;
 
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
  */
 @Slf4j
 @Configuration
+@Order
 public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
 
     /**
