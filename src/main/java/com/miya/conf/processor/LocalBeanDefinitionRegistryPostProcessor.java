@@ -28,23 +28,21 @@ public class LocalBeanDefinitionRegistryPostProcessor implements BeanDefinitionR
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        log.info("=== postProcessBeanDefinitionRegistry ===");
+        log.info("LocalBeanDefinitionRegistryPostProcessor ===> postProcessBeanDefinitionRegistry");
     }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        log.info("=== postProcessBeanFactory ===");
+        log.info("LocalBeanDefinitionRegistryPostProcessor ===> postProcessBeanFactory");
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("=== serverPort ===" + serverPort);
-        log.info("=== InitializingBean ===");
+        log.info("LocalBeanDefinitionRegistryPostProcessor ===> afterPropertiesSet ===> serverPort = {}", serverPort);
     }
 
     @PostConstruct
     public void init(){
-        log.info("=== serverPort ===" + serverPort);
         log.info("由于实现了BeanDefinitionRegistryPostProcessor，此方法不会生效");
     }
 

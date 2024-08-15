@@ -2,12 +2,11 @@ package com.miya.conf.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Primary;
 
 import javax.annotation.PostConstruct;
 
@@ -17,8 +16,8 @@ import javax.annotation.PostConstruct;
  */
 @Slf4j
 @Configuration
-@Order
-public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
+@Primary
+public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     /**
      * 由于实现了 BeanFactoryPostProcessor，此方法不会生效
@@ -28,14 +27,9 @@ public class LocalBeanFactoryPostProcessor implements BeanFactoryPostProcessor, 
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        log.info("=== LocalBeanFactoryPostProcessor ===");
+        log.info("LocalBeanFactoryPostProcessor ===> postProcessBeanFactory");
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        log.info("=== serverPort ===" + serverPort);
-        log.info("=== InitializingBean ===");
-    }
 
     @PostConstruct
     public void init(){

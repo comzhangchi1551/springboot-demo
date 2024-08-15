@@ -3,21 +3,15 @@ package com.miya.conf.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 @Configuration
 @Slf4j
-public class LocalBeanPostProcessor implements BeanPostProcessor, InitializingBean, CommandLineRunner, ApplicationRunner {
-
-    @Value("${server.port}")
-    private String serverPort;
+public class LocalBeanPostProcessor implements BeanPostProcessor, CommandLineRunner, ApplicationRunner, InitializingBean {
 
     // 每一个bean，都会执行
     @Override
@@ -44,12 +38,6 @@ public class LocalBeanPostProcessor implements BeanPostProcessor, InitializingBe
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        log.info("=== serverPort ===" + serverPort);
-        log.info("=== InitializingBean ===");
-    }
-
-    @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("=== ApplicationRunner ===");
     }
@@ -59,8 +47,8 @@ public class LocalBeanPostProcessor implements BeanPostProcessor, InitializingBe
         log.info("=== CommandLineRunner ===");
     }
 
-    @PostConstruct
-    public void init(){
-        log.info("=== PostConstruct ===");
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        log.info("LocalBeanPostProcessor ===> afterPropertiesSet");
     }
 }
