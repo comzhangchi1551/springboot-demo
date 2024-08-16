@@ -14,7 +14,7 @@ public class BeanAImpl implements BeanA {
     private BeanBImpl beanB;
 
     @Override
-    public void print() {
-        log.info("BeanAImpl print!");
+    public void print(String msg) {
+        log.info("BeanAImpl print! msg = {}", msg);
     }
 }

@@ -2,5 +2,5 @@ package com.miya.bean;
 
 public interface BeanA {
 
-    void print();
+    void print(String msg);
 }

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocalAop {
 
-    @Before("execution(* com.miya.bean.*.*(..))")
+    @Before("execution(* com.miya.bean.BeanA.print(..))")
     public void logBefore(JoinPoint joinPoint) {
-        System.out.println("Executing: " + joinPoint.getSignature().getName());
+        System.out.println("aop -> logBefore");
     }
 
 }
