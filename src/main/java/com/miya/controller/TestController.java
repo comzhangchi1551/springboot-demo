@@ -1,36 +1,40 @@
 package com.miya.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.miya.common.BaseResult;
 import com.miya.common.anno.CurrentUserInfo;
-import com.miya.entity.dto.TempUserInsertDTO;
-import com.miya.entity.dto.TempUserUpdateDTO;
 import com.miya.entity.model.TempUser;
+import com.miya.entity.model.TestInsert;
 import com.miya.event.MyEvent;
 import com.miya.service.TempUserService;
+import com.miya.service.TestInsertService;
+import com.miya.service.impl.TestInsertServiceImpl;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.cache.GuavaCacheMetrics;
 import io.micrometer.core.instrument.binder.jvm.ExecutorServiceMetrics;
-
-
-
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Auth: 张翅
@@ -163,6 +167,59 @@ public class TestController {
         applicationContext.publishEvent(new MyEvent("zzz", 14));
         log.info("MyEvent send success!");
         return BaseResult.success();
+    }
+
+    @Autowired
+    private TestInsertService testInsertService;
+
+    @RequestMapping("insert")
+    public String insertData(){
+
+        List<TestInsert> list = new ArrayList<>();
+
+        for (int i = 0; i < 1000_0000; i++) {
+            TestInsert tempUser = buildModel(i);
+
+            list.add(tempUser);
+
+            if (i % 2000 == 0) {
+                testInsertService.saveBatch(list);
+                list = new ArrayList<>();
+            }
+        }
+        testInsertService.saveBatch(list);
+
+        return "success";
+    }
+
+    private TestInsert buildModel(Integer integer){
+
+        String uuid = UUID.randomUUID().toString();
+
+
+        TestInsert testInsert = new TestInsert();
+
+        testInsert.setUsername(uuid);
+        testInsert.setAge(integer);
+
+        int i = 1;
+        testInsert.setField1(integer + "__" + uuid + "___" + i++);
+        testInsert.setField2(integer + "__" + uuid + "___" + i++);
+        testInsert.setField3(integer + "__" + uuid + "___" + i++);
+        testInsert.setField4(integer + "__" + uuid + "___" + i++);
+        testInsert.setField5(integer + "__" + uuid + "___" + i++);
+        testInsert.setField6(integer + "__" + uuid + "___" + i++);
+        testInsert.setField7(integer + "__" + uuid + "___" + i++);
+        testInsert.setField8(integer + "__" + uuid + "___" + i++);
+        testInsert.setField9(integer + "__" + uuid + "___" + i++);
+        testInsert.setField10(integer + "__" + uuid + "___" + i++);
+        testInsert.setField11(integer + "__" + uuid + "___" + i++);
+        testInsert.setField12(integer + "__" + uuid + "___" + i++);
+        testInsert.setField13(integer + "__" + uuid + "___" + i++);
+        testInsert.setField14(integer + "__" + uuid + "___" + i++);
+        testInsert.setField15(integer + "__" + uuid + "___" + i);
+
+        return testInsert;
     }
 
 

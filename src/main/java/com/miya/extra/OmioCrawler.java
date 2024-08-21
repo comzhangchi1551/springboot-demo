@@ -1,4 +1,4 @@
-package com.miya;
+package com.miya.extra;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
