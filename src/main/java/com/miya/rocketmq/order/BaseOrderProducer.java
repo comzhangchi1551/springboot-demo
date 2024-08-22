@@ -14,7 +14,7 @@ public class BaseOrderProducer {
         // 创建生产者；
         DefaultMQProducer producer = new DefaultMQProducer("my-order-producer-group1");
         // 指定namerServer地址；
-        producer.setNamesrvAddr("192.168.31.208:9876");
+        producer.setNamesrvAddr("192.168.202.101:9876");
 
         // 启动生产者
         producer.start();

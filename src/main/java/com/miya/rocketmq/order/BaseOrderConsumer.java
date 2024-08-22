@@ -13,7 +13,7 @@ public class BaseOrderConsumer {
         // 创建消费者对象
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("my-order-producer-group1");
         // 设置nameServer地址
-        consumer.setNamesrvAddr("192.168.31.208:9876");
+        consumer.setNamesrvAddr("192.168.202.101:9876");
 
         // 订阅主题：topic；和过滤消息用的tag表达式；
         consumer.subscribe("MyOrderTopic", "*");
