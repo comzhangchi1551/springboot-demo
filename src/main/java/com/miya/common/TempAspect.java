@@ -2,8 +2,7 @@ package com.miya.common;
 
 
 import com.alibaba.excel.util.DateUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.miya.common.utils.CJsonUtils;
 import com.miya.common.utils.tracer.TraceThreadLocal;
 import com.miya.common.utils.tracer.TracerEntry;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Auth: 张
@@ -65,7 +66,7 @@ public class TempAspect {
                 result = ((String) res).replaceAll("[\\t\\n\\r]", "-");
             } else if (res instanceof Exception) {
                 Exception e = (Exception) res;
-                result = JSON.toJSONString(e.getMessage());
+                result = CJsonUtils.toJson(e.getMessage());
             } else {
                 result = "success";
             }
@@ -95,7 +96,7 @@ public class TempAspect {
         Signature signature = pjp.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         String[] parNames = methodSignature.getParameterNames();
-        JSONObject json = new JSONObject();
+        Map<String, Object> json = new LinkedHashMap();
         Object[] pars = pjp.getArgs();
         for (int i = 0; i < parNames.length; i++) {
             Object par = pars[i];

@@ -20,4 +20,6 @@ public interface TempUserService extends IService<TempUser> {
     void update(TempUserUpdateDTO updateDTO);
 
     Page<TempUser> selectList(Integer pageNum, Integer pageSize, String keyword);
+
+    void testAop();
 }

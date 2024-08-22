@@ -2,9 +2,10 @@ package com.miya.common.easyexcel;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.alibaba.fastjson.JSON;
+import com.miya.common.utils.CJsonUtils;
 import com.miya.entity.easy.excel.TempUserEO;
 import com.miya.service.TempUserService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -41,9 +42,10 @@ public class TempUserListener extends AnalysisEventListener<TempUserEO> {
      * @param data
      * @param context
      */
+    @SneakyThrows
     @Override
     public void invoke(TempUserEO data, AnalysisContext context) {
-        log.info("解析到一条数据:{}", JSON.toJSONString(data));
+        log.info("解析到一条数据:{}", CJsonUtils.toJson(data));
         list.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
         if (list.size() >= BATCH_COUNT) {

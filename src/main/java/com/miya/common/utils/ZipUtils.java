@@ -1,4 +1,4 @@
-package com.miya.common.utils.tracer;
+package com.miya.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

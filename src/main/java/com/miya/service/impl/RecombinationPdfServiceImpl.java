@@ -1,6 +1,6 @@
 package com.miya.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.miya.common.utils.CJsonUtils;
 import com.miya.dao.*;
 import com.miya.entity.dto.RecombinationPdfDTO;
 import com.miya.entity.model.*;
@@ -35,7 +35,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
     private BindingLayerRelationMapper bindingLayerRelationMapper;
 
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadPoolTaskExecutor localAsyncExecutor;
 
 
 
@@ -45,7 +45,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
         Map<Long, GroupLayerRelation> layerIdGroupLayerRelationMap = new HashMap<>();
         Long psdProjectId = insertData(recombinationPdfDTO, layerIdGroupLayerRelationMap);
 
-        threadPoolTaskExecutor.execute(() -> {
+        localAsyncExecutor.execute(() -> {
             Map<Long, List<GroupLayerRelation>> buildBindingMap =
                     buildBindingMap(recombinationPdfDTO.getBindingsDTOList(), layerIdGroupLayerRelationMap);
 
@@ -61,7 +61,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
 
             PsdWaterfallFlow psdWaterfallFlow = new PsdWaterfallFlow();
             psdWaterfallFlow.setPsdProjectId(psdProjectId);
-            psdWaterfallFlow.setImageIds(JSON.toJSONString(result));
+            psdWaterfallFlow.setImageIds(CJsonUtils.toJson(result));
             psdWaterfallFlow.setVersion(UUID.randomUUID().toString());
             log.info("result = " + result);
 
