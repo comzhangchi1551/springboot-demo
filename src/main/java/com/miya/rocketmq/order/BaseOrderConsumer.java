@@ -1,13 +1,17 @@
 package com.miya.rocketmq.order;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.*;
 import org.apache.rocketmq.common.message.MessageExt;
 
 import java.util.List;
 
+@Slf4j
 public class BaseOrderConsumer {
+
+
     @SneakyThrows
     public static void main(String[] args) {
         // 创建消费者对象
@@ -23,7 +27,7 @@ public class BaseOrderConsumer {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                 for (MessageExt msg : msgs) {
-                    System.out.println(String.format("收到的消息：[%s]", new String(msg.getBody())));
+                    log.info("收到的消息：[{}]", msg);
                 }
                 return ConsumeOrderlyStatus.SUCCESS;
             }
@@ -31,6 +35,6 @@ public class BaseOrderConsumer {
 
         // 启动消费者
         consumer.start();
-        System.out.println("消费者已启动！！！");
+        log.info("消费者已启动！！！");
     }
 }
