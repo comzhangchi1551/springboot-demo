@@ -21,11 +21,11 @@ public class BaseResult<T> {
     }
 
     public static BaseResult success(){
-        return new BaseResult("success", 0, null);
+        return new BaseResult("success", 200, null);
     }
 
     public static BaseResult success(Object data){
-        return new BaseResult("success", 0, data);
+        return new BaseResult("success", 200, data);
     }
 
     public static BaseResult error(){

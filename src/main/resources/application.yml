@@ -47,3 +47,7 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+rocketmq:
+  name-server: "192.168.202.101:9876"
+  producer:
+    group: "springboot-demo-group"

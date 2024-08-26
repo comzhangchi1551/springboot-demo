@@ -22,7 +22,7 @@ public class BaseOrderConsumer {
         // 订阅主题：topic；和过滤消息用的tag表达式；
         consumer.subscribe("MyOrderTopic", "*");
 
-        // 创建一个监听器，当broker把消息推过来时，调用；
+        // 创建一个监听器，当broker把消息推过来时，调用；  MessageListenerOrderly 表明是 orderly 的监听
         consumer.registerMessageListener(new MessageListenerOrderly() {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {

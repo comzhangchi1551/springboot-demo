@@ -17,7 +17,7 @@ public class BaseBatchProducer {
         // 创建生产者；
         DefaultMQProducer producer = new DefaultMQProducer("my-batch-producer-group");
         // 指定namerServer地址；
-        producer.setNamesrvAddr("192.168.31.208:9876");
+        producer.setNamesrvAddr("192.168.202.101:9876");
 
         // 启动生产者
         producer.start();
