@@ -32,7 +32,7 @@ spring:
 # 日志debug显示
 logging:
   level:
-    com.miya.dao: info
+    com.miya.dao: debug
 mybatis-plus:
   configuration:
     lazy-loading-enabled: true
