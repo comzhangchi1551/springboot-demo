@@ -56,7 +56,7 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
 
             Integer minKey = sortGroupMap.keySet().stream().min((a, b) -> a.compareTo(b)).get();
 
-            generateWaterfallFlow(sortGroupMap, minKey, buildBindingMap, new Stack<Long>(), new Stack<>(), new Stack<>(), result);
+            generateWaterfallFlow(sortGroupMap, minKey, buildBindingMap, new ArrayDeque<Long>(), new ArrayDeque<>(), new ArrayDeque<>(), result);
 
 
             PsdWaterfallFlow psdWaterfallFlow = new PsdWaterfallFlow();
@@ -83,9 +83,9 @@ public class RecombinationPdfServiceImpl implements RecombinationPdfService {
     private static void generateWaterfallFlow(Map<Integer, RecombinationPdfDTO.LayerGroupDTO> sortGroupMap,
                                               Integer sort,
                                               Map<Long, List<GroupLayerRelation>> buildBindingMap,
-                                              Stack<Long> layerStack,
-                                              Stack<GroupLayerRelation> layerBindingStack,
-                                              Stack<GroupLayerRelation> otherLayerBindingStack,
+                                              ArrayDeque<Long> layerStack,
+                                              ArrayDeque<GroupLayerRelation> layerBindingStack,
+                                              ArrayDeque<GroupLayerRelation> otherLayerBindingStack,
                                               List<List<Long>> result) {
         // 当没有下一分组的时候，递归结束
         RecombinationPdfDTO.LayerGroupDTO layerGroupDTO = sortGroupMap.get(sort);
